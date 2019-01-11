@@ -23,5 +23,5 @@
 hs_err_pid*
 
 #LaTeX stuff
-.aux
-.synctex.gz
+*.aux
+*.synctex.gz
