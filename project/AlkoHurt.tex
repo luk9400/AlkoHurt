@@ -8,6 +8,7 @@
 \usepackage{amsthm}
 \usepackage{enumerate}
 \usepackage{graphicx}
+\usepackage{hyperref}
 
 \usepackage{indentfirst}
 
@@ -22,19 +23,38 @@
 
     Celem projektu jest stworzenie aplikacji bazodanowej pomagającej w zarządzaniu pojedynczym magazynem w hurtowni alkoholi. Aplikacja będzie oparta o relacyjną bazę danych z użyciem języka SQL.
     
-    Aplikacja będzie udostępniać dostęp do bazy danych z trzech poziomów: administratora, kierownik i pracownika. Każdy z nich posiada dedykowane uprawnienia:
+\section*{Użytkownicy}
+    
+    Aplikacja będzie udostępniać dostęp do bazy danych z trzech poziomów: administratora, kierownika i pracownika. Każdy z nich posiada dedykowane uprawnienia:
     \begin{itemize}
-        \item Administrator - 
-        \item Kierownik - 
-        \item Pracownik - 
+        \item \textbf{Administrator} - dostęp do całej bazy danych
+        \item \textbf{Kierownik} - dodawanie i aktualizowanie nowych produktów, dostaw oraz dostawców
+        \item \textbf{Pracownik} - dodawanie nowych zamówień oraz klientów
+    \end{itemize}
+    
+\section*{Baza danych}
+
+    Baza danych będzie posiadała następujące tabele (dokładny schemat na  \hyperref[fig:diagram]{diagramie UML}):
+    
+    \begin{itemize}
+        \item \textbf{users} - użytkownicy bazy danych (z podziałem na uprawnienia dostępu)
+        \item \textbf{products} - informacje o cenie i ilości produktów
+        \item \textbf{liquors} - szczegółowe informacje o alkoholach wysokoprocentowych
+        \item \textbf{beers} - szczegółowe informacje o piwach
+        \item \textbf{wines} - szczegółowe informacje o winach
+        \item \textbf{supplies} - informacje o dostawach
+        \item \textbf{supplies info} - dokładne informacje o konkretnej dostawie
+        \item \textbf{suppliers} - informacje o dostawcach
+        \item \textbf{sales} - informacje o sprzedażach (historycznych i planowanych)
+        \item \textbf{sales info} - dokładne informacje o konkretnej sprzedaży
+        \item \textbf{clients} - informacje o klientach
     \end{itemize}
     
 \begin{figure}
     \centering
-    
     \includegraphics[width=\columnwidth]{uml}
     \caption{Diagram UML}
-    \label{fig: diagram}
+    \label{fig:diagram}
 \end{figure}
     
     
