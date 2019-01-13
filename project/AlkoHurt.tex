@@ -33,6 +33,7 @@
     \end{itemize}
     
 \section*{Baza danych}
+\subsection*{Tabele}
 
     Baza danych będzie posiadała następujące tabele (dokładny schemat na  \hyperref[fig:diagram]{diagramie UML}):
     
@@ -50,6 +51,35 @@
         \item \textbf{clients} - informacje o klientach
     \end{itemize}
     
+\subsection*{Triggery}
+
+    \begin{itemize}
+        \item Trigger uruchamiany przed dodaniem nowego trunku - najpierw dodaje krotkę do tabeli \textbf{products}, a następnie odpowiednie krotki do właściwych tabel
+        \item Trigger uruchamiany po aktualizacji tabel \textbf{sales} lub \textbf{supplies} - po zmianie wartości pola \textit{done} na \texttt{true} aktualizuje ilość produktów w tabeli \textbf{products}
+    \end{itemize}        
+
+\subsection*{Procedury}
+
+    \subsubsection*{Kierownik}
+        \begin{itemize}
+            \item \textsf{add\_liquor} - dodaje nowy alkohol wysokoprocentowy do bazy danych
+            \item \textsf{add\_beer} - dodaje nowe piwo do bazy danych
+            \item \textsf{add\_wine} - dodaje nowe wino do bazy danych
+            \item \textsf{add\_supplier} - dodaje nowego dostawcę do bazy danych
+        \end{itemize}
+    
+    \subsubsection*{Pracownik}
+        \begin{itemize}
+            \item \textsf{add\_client} - dodaje nowego klienta do bazy danych
+            \item \textsf{plan\_supply} - dodaje nową planowaną dostawę
+            \item \textsf{plan\_sale} - dodaje nową planowaną sprzedaż
+            \item \textsf{show\_quantity} - pokazuje szacowaną dostępność danego towaru na dany dzień
+        \end{itemize}
+        
+        Ponadto wszystkie procedury dostępne dla pracownika są też dostępne dla kierownika.
+        
+\subsection*{Diagram UML}
+        
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{uml}
