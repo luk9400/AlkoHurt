@@ -12,8 +12,12 @@ router.get('/supplier', function (req, res, next) {
 });
 
 router.post('/add_supplier', function (req, res, next) {
-  controller.test(req.body.name);
-  res.redirect('/');
+  try {
+    controller.addSupplier(req.body.name, req.body.nip, req.body.street, req.body.postal, req.body.city, req.body.phone, req.body.email);
+    res.redirect('/');
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 module.exports = router;
