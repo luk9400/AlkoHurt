@@ -23,4 +23,8 @@ async function asyncFunction() {
   }
 }
 
-asyncFunction();
+function test(str) {
+  console.log(str);
+}
+
+module.exports = {test};
