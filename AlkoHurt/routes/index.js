@@ -16,4 +16,11 @@ router.post('/add_supplier', function (req, res, next) {
   res.redirect('/');
 });
 
-module.exports = router;
+router.get('/login_page', function (req, res, next) {
+  res.render('login_page');
+});
+
+router.post('/login', function (req, res, next) {
+  controller.test(req.body.name);
+  res.redirect('/');
+});module.exports = router;
