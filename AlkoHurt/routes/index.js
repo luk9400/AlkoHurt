@@ -4,7 +4,7 @@ const controller = require('../controllers/controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'AlkoHurt' });
+  res.render('indexAdmin', { title: 'AlkoHurt' });
 });
 
 router.get('/supplier', function (req, res, next) {
