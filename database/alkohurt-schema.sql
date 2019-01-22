@@ -258,11 +258,11 @@ DELIMITER //
 CREATE PROCEDURE add_liquor(IN name VARCHAR(50), IN type ENUM('vodka', 'whiskey', 'gin'), IN abv FLOAT UNSIGNED,
   IN capacity INT UNSIGNED, IN price DECIMAL(4, 2) UNSIGNED)
   BEGIN
-    IF beer_already_exists(name, type, abv, capacity) THEN
-      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Beer already exists';
+    IF liquor_already_exists(name, type, abv, capacity) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Liquor already exists';
     ELSE
       CALL add_product(name, 'liquor', capacity, abv, price, 0, @id);
-      CALL inner_add_beer(@id, name, type, abv, capacity);
+      CALL inner_add_liquor(@id, name, type, abv, capacity);
     END IF;
   END //
 DELIMITER ;
