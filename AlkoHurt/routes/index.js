@@ -20,4 +20,13 @@ router.post('/add_supplier', function (req, res, next) {
   }
 });
 
+router.get('/login', function (req, res, next) {
+  res.render('login');
+});
+
+router.post('/login', function (req, res, next) {
+  controller.test(req.body.name);
+  res.redirect('/');
+});
+
 module.exports = router;
