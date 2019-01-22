@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add wine</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+<body>
+<div class="container form" >
+    <form action="/add_wine" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Name</label>
+                <input type="text" class="form-control" placeholder="Name" id="inputDefault" required="required" name="name">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleSelect1">Color</label>
+                <select class="form-control" id="exampleSelect1" name="color">
+                    <option>Red</option>
+                    <option>White</option>
+                    <option>Rose</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Alcohol by volume (%)</label>
+                <input type="number" class="form-control" placeholder="10" id="inputDefault" required="required" name="abv">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleSelect1">Type</label>
+                <select class="form-control" id="exampleSelect1" name="type">
+                    <option>brut nature</option>
+                    <option>extra brut</option>
+                    <option>brut</option>
+                    <option>extra dry</option>
+                    <option>dry</option>
+                    <option>medium dry</option>
+                    <option>medium sweet</option>
+                    <option>sweet</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Capacity</label>
+                <input type="number" class="form-control" placeholder="500ml" id="inputDefault" required="required" name="capacity">
+            </div>
+        </fieldset>
+    </form>
+</div>
+</body>
