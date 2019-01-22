@@ -1,4 +1,5 @@
 const mariadb = require('mariadb');
+
 const pool = mariadb.createPool({
   host: 'localhost',
   port: '3306',
@@ -48,5 +49,6 @@ async function addLiquor(name, type, abv, capacity, price) {
   await conn.query(query, [name, type, abv, capacity, price]);
   conn.end();
 }
+
 
 module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor};

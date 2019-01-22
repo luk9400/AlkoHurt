@@ -74,6 +74,10 @@ router.post('/add_liquor', async function (req, res, next) {
   }
 });
 
+router.get('/plan-supply', function (req, res, next) {
+  res.render('plan-supply');
+});
+
 router.get('/login', function (req, res, next) {
     res.render('login');
 });
