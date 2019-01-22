@@ -33,6 +33,10 @@ router.get('/add_client', function (req, res, next) {
   }
 });
 
+router.get('/add-wine', function (req, res, next) {
+  res.render('add-wine');
+})
+
 router.get('/login', function (req, res, next) {
     res.render('login');
 });
