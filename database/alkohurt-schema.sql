@@ -7,7 +7,7 @@ USE alkohurt;
 CREATE TABLE products (
   product_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   type       enum ('beer', 'liquor', 'wine'),
-  price      decimal UNSIGNED,
+  price      decimal(4, 2) UNSIGNED,
   quantity   int UNSIGNED
 );
 

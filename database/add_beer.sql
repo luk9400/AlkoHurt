@@ -1,6 +1,6 @@
 DELIMITER //
 CREATE PROCEDURE add_beer(IN name VARCHAR(50), IN brewery VARCHAR(50), IN abv FLOAT UNSIGNED, IN type VARCHAR(50),
-  IN capacity INT UNSIGNED, IN container_type ENUM('bottle', 'can', 'returnable'), IN price DECIMAL UNSIGNED)
+  IN capacity INT UNSIGNED, IN container_type ENUM('bottle', 'can', 'returnable'), IN price DECIMAL(4, 2) UNSIGNED)
   BEGIN
     IF beer_already_exists(name, brewery, abv, type, capacity, container_type) THEN
       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Beer already exists';
@@ -47,7 +47,7 @@ CREATE PROCEDURE inner_add_beer(IN id INT, IN name_in VARCHAR(50), IN brewery_in
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE add_product(IN type_in ENUM('beer', 'liquor', 'wine'), IN price_in DECIMAL UNSIGNED,
+CREATE PROCEDURE add_product(IN type_in ENUM('beer', 'liquor', 'wine'), IN price_in DECIMAL(4, 2) UNSIGNED,
   IN quantity_in INT UNSIGNED, OUT id INT)
   BEGIN
     INSERT INTO products(type, price, quantity)
