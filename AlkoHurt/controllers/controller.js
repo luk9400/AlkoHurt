@@ -45,4 +45,12 @@ async function addClient(name, nip, street, postal, city, phone, email) {
   return query;
 }
 
-module.exports = {test, addSupplier, addClient};
+async function addWine(name, color, abv, type, capacity, country_of_origin, price) {
+  let conn;
+  conn = await pool.getConnection();
+  const query = 'CALL add_wine(?, ?, ?, ?, ?, ?, ?)';
+  await conn.query(query, [name, color, abv, type, capacity, country_of_origin, price]);
+  conn.end();
+}
+
+module.exports = {test, addSupplier, addClient, addWine};

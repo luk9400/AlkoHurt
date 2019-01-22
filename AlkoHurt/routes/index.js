@@ -35,7 +35,17 @@ router.get('/add_client', function (req, res, next) {
 
 router.get('/add-wine', function (req, res, next) {
   res.render('add-wine');
-})
+});
+
+router.post('/add_wine', async function (req, res, next) {
+  try {
+    await controller.addWine(req.body.name, req.body.color, req.body.abv, req.body.type, req.body.capacity,
+      req.body.country_of_origin, req.body.price);
+    res.redirect('/')
+  } catch (e) {
+    console.log(e);
+  }
+});
 
 router.get('/login', function (req, res, next) {
     res.render('login');

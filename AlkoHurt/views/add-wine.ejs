@@ -12,7 +12,7 @@
         <fieldset>
             <div class="form-group">
                 <label class="col-form-label" for="inputDefault">Name</label>
-                <input type="text" class="form-control" placeholder="Name" id="inputDefault" required="required" name="name">
+                <input type="text" class="form-control" placeholder="Amarena" id="inputDefault" required="required" name="name">
             </div>
 
             <div class="form-group">
@@ -26,7 +26,8 @@
 
             <div class="form-group">
                 <label class="col-form-label" for="inputDefault">Alcohol by volume (%)</label>
-                <input type="number" class="form-control" placeholder="10" id="inputDefault" required="required" name="abv">
+                <input type="number" step="0.01" min="0" class="form-control" placeholder="11"
+                       id="inputDefault" required="required" name="abv">
             </div>
 
             <div class="form-group">
@@ -44,10 +45,26 @@
             </div>
 
             <div class="form-group">
-                <label class="col-form-label" for="inputDefault">Capacity</label>
-                <input type="number" class="form-control" placeholder="500ml" id="inputDefault" required="required" name="capacity">
+                <label class="col-form-label" for="inputDefault">Capacity (ml)</label>
+                <input type="number" step="0.01" min="0" class="form-control" placeholder="500"
+                       id="inputDefault" required="required" name="capacity">
             </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Country of origin</label>
+                <input type="text" class="form-control" placeholder="Italy" id="inputDefault" required="required" name="country_of_origin">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Price</label>
+                <input type="number" step="0.01" min="0" class="form-control" placeholder="2.99" id="inputDefault" required="required" name="price">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
         </fieldset>
     </form>
+    <footer>
+        <%include footer%>
+    </footer>
 </div>
 </body>
