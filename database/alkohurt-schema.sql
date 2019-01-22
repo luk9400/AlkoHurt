@@ -6,7 +6,10 @@ USE alkohurt;
 
 CREATE TABLE products (
   product_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name       varchar(50),
   type       enum ('beer', 'liquor', 'wine'),
+  capacity   int UNSIGNED,
+  abv        float UNSIGNED,
   price      decimal(4, 2) UNSIGNED,
   quantity   int UNSIGNED
 );
@@ -37,6 +40,7 @@ CREATE TABLE wines (
   color             enum ('white', 'red', 'rose'),
   type              enum ('brut nature', 'extra brut', 'brut', 'extra dry', 'dry', 'medium dry', 'medium sweet', 'sweet'),
   abv               float UNSIGNED,
+  capacity          int UNSIGNED,
   country_of_origin varchar(30),
   FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
 );
@@ -102,3 +106,119 @@ CREATE TABLE sales_info (
   FOREIGN KEY (product_id) REFERENCES products (product_id),
   FOREIGN KEY (sale_id) REFERENCES sales (sale_id)
 );
+
+DELIMITER //
+CREATE PROCEDURE add_product(IN name_in VARCHAR(50), IN type_in ENUM('beer', 'liquor', 'wine'), IN capacity_in INT UNSIGNED,
+  IN abv_in FLOAT UNSIGNED, IN price_in DECIMAL(4, 2) UNSIGNED, IN quantity_in INT UNSIGNED, OUT id INT)
+  BEGIN
+    INSERT INTO products(name, type, capacity, abv, price, quantity)
+    VALUES (
+      name_in,
+      type_in,
+      capacity_in,
+      abv_in,
+      price_in,
+      quantity_in
+    );
+    SELECT last_insert_id() INTO id;
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION beer_already_exists(name VARCHAR(50), brewery VARCHAR(50), abv FLOAT UNSIGNED, type VARCHAR(50),
+  capacity INT UNSIGNED, container_type ENUM('bottle', 'can', 'returnable')) RETURNS BOOLEAN
+  BEGIN
+    RETURN !ISNULL ((
+      SELECT product_id
+      FROM beers b
+      WHERE
+        b.name = name AND
+        b.brewery = brewery AND
+        b.abv = abv AND
+        b.type = type AND
+        b.capacity = capacity AND
+        b.container_type = container_type
+    ));
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE inner_add_beer(IN id INT, IN name_in VARCHAR(50), IN brewery_in VARCHAR(50), IN abv_in FLOAT UNSIGNED,
+  IN type_in VARCHAR(50), IN capacity_in INT UNSIGNED, IN container_type_in ENUM('bottle', 'can', 'returnable'))
+  BEGIN
+    INSERT INTO beers(product_id, brewery, name, type, abv, capacity, container_type)
+    VALUES (
+      id,
+      brewery_in,
+      name_in,
+      type_in,
+      abv_in,
+      capacity_in,
+      container_type_in
+    );
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE add_beer(IN name VARCHAR(50), IN brewery VARCHAR(50), IN abv FLOAT UNSIGNED, IN type VARCHAR(50),
+  IN capacity INT UNSIGNED, IN container_type ENUM('bottle', 'can', 'returnable'), IN price DECIMAL(4, 2) UNSIGNED)
+  BEGIN
+    IF beer_already_exists(name, brewery, abv, type, capacity, container_type) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Beer already exists';
+    ELSE
+      CALL add_product(name, 'beer', capacity, abv, price, 0, @id);
+      CALL inner_add_beer(@id, name, brewery, abv, type, capacity, container_type);
+    END IF;
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION wine_already_exists(name VARCHAR(50), color ENUM('white', 'red', 'rose'), abv FLOAT UNSIGNED,
+  type enum ('brut nature', 'extra brut', 'brut', 'extra dry', 'dry', 'medium dry', 'medium sweet', 'sweet'),
+  capacity INT UNSIGNED, country_of_origin VARCHAR(30)) RETURNS BOOLEAN
+  BEGIN
+    RETURN !ISNULL ((
+      SELECT product_id
+      FROM wines w
+      WHERE
+        w.name = name AND
+        w.color = color AND
+        w.abv = abv AND
+        w.type = type AND
+        w.capacity = capacity AND
+        w.country_of_origin = country_of_origin
+      ));
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE inner_add_wine(IN id INT, IN name_in VARCHAR(50), IN color_in ENUM('white', 'red', 'rose'), IN abv_in FLOAT UNSIGNED,
+  IN type_in enum ('brut nature', 'extra brut', 'brut', 'extra dry', 'dry', 'medium dry', 'medium sweet', 'sweet'),
+  IN capacity_in INT UNSIGNED, IN country_of_origin_in VARCHAR(30))
+  BEGIN
+    INSERT INTO wines(product_id, name, color, type, abv, capacity, country_of_origin)
+    VALUES (
+      id,
+      name_in,
+      color_in,
+      type_in,
+      abv_in,
+      capacity_in,
+      country_of_origin_in
+    );
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE add_wine(IN name VARCHAR(50), IN color ENUM('white', 'red', 'rose'), IN abv FLOAT UNSIGNED,
+  IN type ENUM('brut nature', 'extra brut', 'brut', 'extra dry', 'dry', 'medium dry', 'medium sweet', 'sweet'),
+  IN capacity INT UNSIGNED, IN country_of_origin VARCHAR(30), IN price DECIMAL(4, 2) UNSIGNED)
+  BEGIN
+    IF wine_already_exists(name, color, abv, type, capacity, country_of_origin) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Wine already exists';
+    ELSE
+      CALL add_product(name, 'wine',capacity, abv, price, 0, @id);
+      CALL inner_add_wine(@id, name, color, abv, type, capacity, country_of_origin);
+    END IF;
+  END //
+DELIMITER ;

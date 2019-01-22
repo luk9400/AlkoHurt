@@ -5,7 +5,7 @@ CREATE PROCEDURE add_beer(IN name VARCHAR(50), IN brewery VARCHAR(50), IN abv FL
     IF beer_already_exists(name, brewery, abv, type, capacity, container_type) THEN
       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Beer already exists';
     ELSE
-      CALL add_product('beer', price, 0, @id);
+      CALL add_product(name, 'beer', price, 0, @id);
       CALL inner_add_beer(@id, name, brewery, abv, type, capacity, container_type);
     END IF;
   END //
@@ -47,11 +47,12 @@ CREATE PROCEDURE inner_add_beer(IN id INT, IN name_in VARCHAR(50), IN brewery_in
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE add_product(IN type_in ENUM('beer', 'liquor', 'wine'), IN price_in DECIMAL(4, 2) UNSIGNED,
+CREATE PROCEDURE add_product(IN name_in VARCHAR(50), IN type_in ENUM('beer', 'liquor', 'wine'), IN price_in DECIMAL(4, 2) UNSIGNED,
   IN quantity_in INT UNSIGNED, OUT id INT)
   BEGIN
-    INSERT INTO products(type, price, quantity)
+    INSERT INTO products(name, type, price, quantity)
     VALUES (
+      name_in,
       type_in,
       price_in,
       quantity_in
@@ -63,7 +64,7 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS beer_already_exists;
 DROP PROCEDURE IF EXISTS add_beer;
 DROP PROCEDURE IF EXISTS inner_add_beer;
-DROP PROCEDURE IF EXISTS add_product
+DROP PROCEDURE IF EXISTS add_product;
 
 SELECT * FROM products;
 CALL add_beer('piwko', 'browarex', 6.9, 'mocne', 500, 'can', 2.99);
