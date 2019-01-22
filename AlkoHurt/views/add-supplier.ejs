@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add supplier</title>
     <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
     <link rel="stylesheet" href="/stylesheets/style.css" />
@@ -45,12 +46,13 @@
                 <input type="email" class="form-control" placeholder="email@example.com" id="inputDefault" required="required" name="email">
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary float-lg-right">Submit</button>
+            <button type="button" formaction="../indexAdmin" class="btn btn-primary float-lg-left">Back</button>
         </fieldset>
     </form>
-    <footer>
-        <%include footer%>
-    </footer>
 </div>
+<footer>
+    <%include footer%>
+</footer>
 </body>
 </html>
