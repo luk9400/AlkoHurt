@@ -222,3 +222,47 @@ CREATE PROCEDURE add_wine(IN name VARCHAR(50), IN color ENUM('white', 'red', 'ro
     END IF;
   END //
 DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION liquor_already_exists(name VARCHAR(50), type enum ('vodka', 'whiskey', 'gin'), abv FLOAT UNSIGNED,
+  capacity INT UNSIGNED) RETURNS BOOLEAN
+  BEGIN
+    RETURN !ISNULL ((
+      SELECT product_id
+      FROM liquors l
+      WHERE
+        l.name = name AND
+        l.type = type AND
+        l.abv = abv AND
+        l.capacity = capacity
+    ));
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE inner_add_liquor(IN id INT, IN name_in VARCHAR(50), IN type_in enum ('vodka', 'whiskey', 'gin'),
+  IN abv_in FLOAT UNSIGNED, IN capacity_in INT UNSIGNED)
+  BEGIN
+    INSERT INTO liquors(product_id, type, name, abv, capacity)
+    VALUES (
+      id,
+      name_in,
+      type_in,
+      abv_in,
+      capacity_in
+    );
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE add_liquor(IN name VARCHAR(50), IN type ENUM('vodka', 'whiskey', 'gin'), IN abv FLOAT UNSIGNED,
+  IN capacity INT UNSIGNED, IN price DECIMAL(4, 2) UNSIGNED)
+  BEGIN
+    IF beer_already_exists(name, type, abv, capacity) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Beer already exists';
+    ELSE
+      CALL add_product(name, 'liquor', capacity, abv, price, 0, @id);
+      CALL inner_add_beer(@id, name, type, abv, capacity);
+    END IF;
+  END //
+DELIMITER ;
