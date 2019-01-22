@@ -47,6 +47,33 @@ router.post('/add_wine', async function (req, res, next) {
   }
 });
 
+router.get('/add-beer', function (req, res, next) {
+  res.render('add-beer');
+});
+
+router.post('/add_beer', async function (req, res, next) {
+  try {
+    await controller.addBeer(req.body.name, req.body.brew, req.body.abv, req.body.type, req.body.capacity,
+      req.body.container_type, req.body.price);
+    res.redirect('/')
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+router.get('/add-liquor', function (req, res, next) {
+  res.render('add-liquor');
+});
+
+router.post('/add_liquor', async function (req, res, next) {
+  try {
+    await controller.addLiquor(req.body.name, req.body.type, req.body.abv, req.body.capacity, req.body.price);
+    res.redirect('/')
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 router.get('/login', function (req, res, next) {
     res.render('login');
 });

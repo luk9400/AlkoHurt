@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8">
+    <title>Add beer</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+<body>
+<div class="container form" >
+    <h1>Add beer</h1>
+    <form action="/add_beer" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Name</label>
+                <input type="text" class="form-control" placeholder="Harnaś" id="inputDefault" required="required" name="name">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Brewery</label>
+                <input type="text" class="form-control" placeholder="Okocim" id="inputDefault" required="required" name="brew">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Alcohol by volume (%)</label>
+                <input type="number" step="0.01" min="0" class="form-control" placeholder="11"
+                       id="inputDefault" required="required" name="abv">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Type</label>
+                <input type="text" class="form-control" placeholder="Type" id="inputDefault" required="required" name="type">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Capacity (ml)</label>
+                <input type="number" step="1" min="0" class="form-control" placeholder="500"
+                       id="inputDefault" required="required" name="capacity">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleSelect1">Container type</label>
+                <select class="form-control" id="exampleSelect1" name="container_type">
+                    <option>bottle</option>
+                    <option>can</option>
+                    <option>returnable</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Price</label>
+                <input type="number" step="0.01" min="0" class="form-control" placeholder="2.99" id="inputDefault" required="required" name="price">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </fieldset>
+    </form>
+    <footer>
+        <%include footer%>
+    </footer>
+</div>
+</body>

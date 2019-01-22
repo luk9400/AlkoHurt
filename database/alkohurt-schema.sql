@@ -240,10 +240,10 @@ CREATE FUNCTION liquor_already_exists(name VARCHAR(50), type enum ('vodka', 'whi
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE inner_add_liquor(IN id INT, IN name_in VARCHAR(50), IN type_in enum ('vodka', 'whiskey', 'gin'),
+CREATE PROCEDURE inner_add_liquor(IN id INT, IN name_in VARCHAR(50), IN type_in enum('vodka', 'whiskey', 'gin'),
   IN abv_in FLOAT UNSIGNED, IN capacity_in INT UNSIGNED)
   BEGIN
-    INSERT INTO liquors(product_id, type, name, abv, capacity)
+    INSERT INTO liquors(product_id, name, type, abv, capacity)
     VALUES (
       id,
       name_in,

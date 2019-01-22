@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add liquor</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+<body>
+<div class="container form" >
+    <h1>Add liqour</h1>
+    <form action="/add_liquor" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Name</label>
+                <input type="text" class="form-control" placeholder="Finlandia" id="inputDefault" required="required" name="name">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleSelect1">Type</label>
+                <select class="form-control" id="exampleSelect1" name="type">
+                    <option>vodka</option>
+                    <option>whiskey</option>
+                    <option>gin</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Alcohol by volume (%)</label>
+                <input type="number" step="0.01" min="0" class="form-control" placeholder="40"
+                       id="inputDefault" required="required" name="abv">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Capacity (ml)</label>
+                <input type="number" step="1" min="0" class="form-control" placeholder="500"
+                       id="inputDefault" required="required" name="capacity">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Price</label>
+                <input type="number" step="0.01" min="0" class="form-control" placeholder="19.99" id="inputDefault" required="required" name="price">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </fieldset>
+    </form>
+    <footer>
+        <%include footer%>
+    </footer>
+</div>
+</body>
