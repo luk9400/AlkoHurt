@@ -17,7 +17,7 @@ CREATE TABLE liquors (
   name       varchar(50),
   abv        float UNSIGNED,
   capacity   int UNSIGNED,
-  FOREIGN KEY (product_id) REFERENCES products (product_id)
+  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
 );
 
 CREATE TABLE beers (
@@ -28,7 +28,7 @@ CREATE TABLE beers (
   abv            float UNSIGNED,
   capacity       int UNSIGNED,
   container_type ENUM ('bottle', 'can', 'returnable'),
-  FOREIGN KEY (product_id) REFERENCES products (product_id)
+  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
 );
 
 CREATE TABLE wines (
@@ -38,7 +38,7 @@ CREATE TABLE wines (
   type              enum ('brut nature', 'extra brut', 'brut', 'extra dry', 'dry', 'medium dry', 'medium sweet', 'sweet'),
   abv               float UNSIGNED,
   country_of_origin varchar(30),
-  FOREIGN KEY (product_id) REFERENCES products (product_id)
+  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
 );
 
 CREATE TABLE users (
