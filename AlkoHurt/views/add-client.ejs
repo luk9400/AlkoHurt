@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add client</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+<body>
+<div class="container form" >
+    <h1>Add client</h1>
+    <form action="/add_client" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Name</label>
+                <input type="text" class="form-control" placeholder="Name" id="inputDefault" required="required" name="name">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">NIP</label>
+                <input type="number" class="form-control" placeholder="XXXXXXXXXX" id="inputDefault" required="required" name="nip">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Street and number</label>
+                <input type="text" class="form-control" placeholder="Street 1" id="inputDefault" required="required" name="street">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Postal code</label>
+                <input type="text" class="form-control" placeholder="XXXXX" id="inputDefault" required="required" name="postal">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">City</label>
+                <input type="text" class="form-control" placeholder="Breslau" id="inputDefault" required="required" name="city">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Phone number</label>
+                <input type="number" class="form-control" placeholder="48 666 666 666" id="inputDefault" required="required" name="phone">
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Email address</label>
+                <input type="email" class="form-control" placeholder="email@example.com" id="inputDefault" required="required" name="email">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </fieldset>
+    </form>
+    <footer>
+        <%include footer%>
+    </footer>
+</div>
+</body>
+</html>
