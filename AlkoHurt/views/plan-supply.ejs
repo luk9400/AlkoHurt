@@ -2,21 +2,23 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add liquor</title>
+    <title>Plan supply</title>
     <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
     <link rel="stylesheet" href="/stylesheets/style.css" />
-    <script src="/js/tools.js"></script>
+    <script src="/javascripts/tools.js"></script>
+    <script>
+        let data = <%- JSON.stringify(data)%>;
+    </script>
 </head>
 <body>
 <div class="container form" >
-    <h1>Add liqour</h1>
+    <h1>Plan supply</h1>
     <form action="/plan_supply" method="post">
-        <fieldset id="selections">
-            <div>
-
-            </div>
-
-            <button onclick="addNewProductField" type="button" class="btn btn-primary btn-lg">Add product</button>
+        <fieldset>
+            <ul id="selections">
+            </ul>
+            <button onclick="addNewProductField()" type="button" class="btn btn-primary btn-lg">Add product</button>
+            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
         </fieldset>
     </form>
 </div>

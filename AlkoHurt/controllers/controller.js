@@ -50,5 +50,29 @@ async function addLiquor(name, type, abv, capacity, price) {
   conn.end();
 }
 
+async function getNames() {
+  const conn = await pool.getConnection();
+  const types = ['beers', 'wines', 'liquors'];
+  let result = [];
 
-module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor};
+  for (type of types) {
+    try {
+      result.push({
+        name: type,
+        data: (await conn.query('SELECT name FROM ' + type)).map(e => e.name)
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  return result;
+}
+
+async function planSupply(data) {
+  const conn = await pool.getConnection();
+
+  // for ()
+}
+
+module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor, getNames, planSupply};
