@@ -38,6 +38,7 @@ async function addWine(name, color, abv, type, capacity, country_of_origin, pric
 }
 
 async function addBeer(name, brewery, abv, type, capacity, container_type, price) {
+  console.log(name, brewery, abv, type, capacity, container_type, price);
   const conn = await pool.getConnection();
   const query = 'CALL add_beer(?, ?, ?, ?, ?, ?, ?)';
   await conn.query(query, [name, brewery, abv, type, capacity, container_type, price]);
@@ -53,11 +54,10 @@ async function addLiquor(name, type, abv, capacity, price) {
 
 async function addUser(login, password, type) {
   const conn = await pool.getConnection();
-  let hashPassword = await bcrypt.hash(password, 10, function (err, hashPassword) {
+  await bcrypt.hash(password, 10, async function (err, hashPassword) {
+    const query = 'INSERT INTO users (login, password, type) VALUES (?, ?, ?)';
+    await conn.query(query, [login, hashPassword, type]);
   });
-  console.log(hashPassword);
-  const query = 'INSERT INTO users (login, password, type) VALUES (?, ?, ?)';
-  await conn.query(query, [login, hashPassword, type]);
   conn.end();
 }
 
