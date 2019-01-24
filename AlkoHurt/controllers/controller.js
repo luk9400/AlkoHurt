@@ -59,9 +59,9 @@ async function getNames() {
     try {
       result.push({
         name: type,
-        data: (await conn.query('SELECT name FROM ' + type)).map(e => e.name)
+        data: (await conn.query(`SELECT product_id, name, capacity FROM ${type}`))
       });
-    } catch (e) {
+     } catch (e) {
       console.log(e);
     }
   }

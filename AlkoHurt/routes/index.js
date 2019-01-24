@@ -84,7 +84,9 @@ router.get('/plan-supply', async function (req, res) {
 
 router.post('/plan_supply', async function (req, res) {
   try {
-    controller.planSupply(req.)
+    // controller.planSupply(req.)
+  } catch (e) {
+    
   }
 });
 
