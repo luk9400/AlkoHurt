@@ -89,7 +89,7 @@ router.get('/add-user', function (req, res, next) {
 
 router.post('/add_user', async function (req, res, next) {
   try {
-    await controller.addUser(req.login, req.password, req.user);
+    await controller.addUser(req.login, req.password, req.type);
     res.redirect('/');
   } catch (e) {
     console.log(e);
