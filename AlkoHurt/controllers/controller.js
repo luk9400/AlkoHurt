@@ -72,7 +72,14 @@ async function getNames() {
 async function planSupply(data) {
   const conn = await pool.getConnection();
 
-  // for ()
+  try {
+    await conn.beginTransaction();
+    //
+    conn.commit();
+  } catch (e) {
+    conn.rollback();
+    console.log(e);
+  }
 }
 
 module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor, getNames, planSupply};

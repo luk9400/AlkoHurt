@@ -3,6 +3,7 @@ window.addEventListener('load', (event) => {
   addNewProductField();
 });
 
+let category_id = 0;
 
 const addNewProductField = () => {
   let selections = document.getElementById('selections');
@@ -24,18 +25,24 @@ const addNewProductField = () => {
 
   container.appendChild(select);
 
-  select.addEventListener('change', (event) => {
+  select.addEventListener('change', () => {
     setSecondarySelect(container);
   });
+
+  container.setAttribute('id', category_id.toString());
+  select.setAttribute('name', 'category');
   select.setAttribute('action', '/get_names');
   selections.appendChild(container);
 
+  category_id++;
   // updateFields(selections.childElementCount);
 };
 
 const setSecondarySelect = (container) => {
   let select = document.createElement('select');
   let input = document.createElement('input');
+
+  select.name = 'name';
 
   for (let obj of data) {
     console.log(obj);
@@ -52,13 +59,29 @@ const setSecondarySelect = (container) => {
 
   }
 
+  input.name = 'number';
   input.type = 'number';
   input.step = '1';
   input.min = '0';
+
   while (container.childElementCount > 1) {
     container.removeChild(container.lastChild);
   }
 
   container.appendChild(select);
   container.appendChild(input);
+};
+
+const updateSupplyData = () => {
+  let divs = document.getElementById('selections').children;
+  for (let div of divs) {
+    console.log(div);
+  }
+  console.log();
+  supply_data = {
+    supplier: document.getElementById('supplierInput').value,
+    date: document.getElementById('dateInput').value
+    // products: document.getElementById('selections').children.
+
+  }
 };
