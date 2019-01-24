@@ -51,11 +51,13 @@ async function addLiquor(name, type, abv, capacity, price) {
   conn.end();
 }
 
-async function addUser(login, password, user) {
+async function addUser(login, password, type) {
   const conn = await pool.getConnection();
-  const hashPassword = await bcrypt.hash(password, 10);
+  let hashPassword = await bcrypt.hash(password, 10, function (err, hashPassword) {
+  });
+  console.log(hashPassword);
   const query = 'INSERT INTO users (login, password, type) VALUES (?, ?, ?)';
-  await conn.query(query, [login, hashPassword, type])
+  await conn.query(query, [login, hashPassword, type]);
   conn.end();
 }
 
