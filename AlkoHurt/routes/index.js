@@ -99,4 +99,19 @@ router.post('/login', function (req, res) {
     res.redirect('/');
 });
 
+router.get('/add-user', function (req, res, next) {
+  res.render('add-user');
+});
+
+router.post('/add_user', async function (req, res, next) {
+  try {
+    await controller.addUser(req.login, req.password, req.user);
+    res.redirect('/');
+  } catch (e) {
+    console.log(e);
+  }
+})
+
+
+
 module.exports = router;
