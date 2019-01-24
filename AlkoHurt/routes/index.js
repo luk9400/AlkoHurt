@@ -4,7 +4,7 @@ const controller = require('../controllers/controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('indexAdmin', { title: 'AlkoHurt' });
+  res.render('indexAdmin', { result: '' });
 });
 
 router.get('/add-supplier', function (req, res, next) {
@@ -82,5 +82,20 @@ router.post('/login', function (req, res, next) {
     controller.test(req.body.name);
     res.redirect('/');
 });
+
+router.get('/add-user', function (req, res, next) {
+  res.render('add-user');
+});
+
+router.post('/add_user', async function (req, res, next) {
+  try {
+    await controller.addUser(req.login, req.password, req.user);
+    res.redirect('/');
+  } catch (e) {
+    console.log(e);
+  }
+})
+
+
 
 module.exports = router;

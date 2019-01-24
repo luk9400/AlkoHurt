@@ -1,4 +1,5 @@
 const mariadb = require('mariadb');
+const bcrypt = require('bcrypt')
 const pool = mariadb.createPool({
   host: 'localhost',
   port: '3306',
@@ -17,6 +18,7 @@ async function addSupplier(name, nip, street, postal, city, phone, email) {
   const query = 'INSERT INTO suppliers (name, nip, street_and_number, postal_code, city, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)';
   await conn.query(query, [name, nip, street, postal, city, phone, email]);
   conn.end();
+  console.log(query);
   return query;
 }
 
@@ -46,6 +48,14 @@ async function addLiquor(name, type, abv, capacity, price) {
   const conn = await pool.getConnection();
   const query = 'CALL add_liquor(?, ?, ?, ?, ?)';
   await conn.query(query, [name, type, abv, capacity, price]);
+  conn.end();
+}
+
+async function adduser(login, passsword, user) {
+  const conn = await pool.getConnection();
+  const hashPassword = await bcrypt.has(password, 10);
+  const query = 'INSERT INTO users (login, password, type) VALUES (?, ?, ?)';
+  await conn.query(query, [login, hashPassword, type])
   conn.end();
 }
 
