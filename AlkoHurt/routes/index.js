@@ -12,7 +12,6 @@ router.get('/', function (req, res, next) {
   } else {
     res.render('login');
   }
-
 });
 
 router.get('/add-supplier', function (req, res, next) {
@@ -88,7 +87,7 @@ router.get('/login', function (req, res, next) {
 
 router.post('/login', async function (req, res, next) {
   try {
-    await controller.login(req.body.login, req.body.password, req.session);
+    req.session = await controller.login(req.body.login, req.body.password, req.session);
     console.log(req.session.login);
     res.redirect('/');
   } catch (e) {
