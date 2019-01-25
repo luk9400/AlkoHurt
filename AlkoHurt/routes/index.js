@@ -81,15 +81,17 @@ router.get('/plan-supply', async function (req, res) {
       res.render('plan-supply', {data: e});
     }).catch( e => {
       console.log(e);
-      res.redirect('/plan-supply');
+      res.redirect('/');
   });
 });
 
 router.post('/plan_supply', async function (req, res) {
   try {
-    // controller.planSupply(req.)
+    console.log(req.body);
+    await controller.planSupply(req.body.supplier, req.body.date, req.body.supplyData);
+
   } catch (e) {
-    
+    console.log(e);
   }
 });
 

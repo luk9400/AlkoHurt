@@ -72,17 +72,21 @@ async function getNames() {
   return result;
 }
 
-async function planSupply(data) {
+async function planSupply(supplier, date, supplyData) {
   const conn = await pool.getConnection();
+  console.log(supplier, date, supplyData);
+  // try {
+  //   await conn.beginTransaction();
+  //   // for (let product of supplyData) {
+  //   //   console.log(product.product_id);
+  //   // }
+  //   conn.commit();
+  // } catch (e) {
+  //   conn.rollback();
+  //   console.log(e);
+  // }
 
-  try {
-    await conn.beginTransaction();
-    //
-    conn.commit();
-  } catch (e) {
-    conn.rollback();
-    console.log(e);
-  }
+  conn.end();
 }
 
 async function addUser(login, password, type) {

@@ -3,7 +3,8 @@ window.addEventListener('load', (event) => {
   addNewProductField();
 });
 
-let category_id = 0;
+let product_index = 0;
+let supplyData = [];
 
 const addNewProductField = () => {
   let selections = document.getElementById('selections');
@@ -16,7 +17,7 @@ const addNewProductField = () => {
   let label = document.createElement('label');
   label.className = 'col-form-label';
   label.for = 'div';
-  label.appendChild(document.createTextNode('Product ' + (category_id+1).toString()));
+  label.appendChild(document.createTextNode('Product ' + (product_index + 1).toString()));
   labeledContainter.appendChild(label);
 
   labeledContainter.className = 'form-group';
@@ -34,73 +35,84 @@ const addNewProductField = () => {
 
   container.appendChild(select);
 
-  select.addEventListener('change', () => {
-    setSecondarySelect(container);
-  });
-
   container.classList.add('product');
   container.classList.add('form-group');
-  container.setAttribute( 'id', category_id.toString());
-  select.id = 'category' + category_id;
-  select.setAttribute('name', 'category');
+  container.setAttribute('id', product_index.toString());
   select.setAttribute('action', '/get_names');
-
   select.className = 'form-control';
+  select.setAttribute('required', 'required');
+
+  select.addEventListener('change', () => {
+    setSecondarySelect(container);
+    updateSupplyData(container);
+  });
+
+
   labeledContainter.appendChild(container);
   selections.appendChild(labeledContainter);
 
-  category_id++;
-  // updateFields(selections.childElementCount);
+  product_index++;
 };
 
 const setSecondarySelect = (container) => {
-  let select = document.createElement('select');
-  let input = document.createElement('input');
+  let nameSelect = document.createElement('select');
+  let quantityInput = document.createElement('input');
 
-  input.className = 'form-control';
-  select.className = 'form-control';
-  select.name = 'name';
-  select.style.marginRight = '10px';
-  select.style.marginLeft = '10px';
+  quantityInput.className = 'form-control';
+  quantityInput.type = 'number';
+  quantityInput.placeholder = 'Quantity';
+  quantityInput.setAttribute('required', 'required');
+  quantityInput.step = '1';
+  quantityInput.min = '1';
+  nameSelect.setAttribute('required', 'required');
+  nameSelect.className = 'form-control';
+  nameSelect.style.marginRight = '10px';
+  nameSelect.style.marginLeft = '10px';
+
+  nameSelect.addEventListener('change', () => {
+    updateSupplyData(container);
+  });
+  quantityInput.addEventListener('change', () => {
+    updateSupplyData(container);
+  });
 
   for (let obj of data) {
-    console.log(obj);
     if (container.children[0].value.toLowerCase() === obj.name) {
-      console.log('xD');
       for (let t of obj.data) {
-        console.log(t);
         let option = document.createElement('option');
         option.value = t.product_id;
         option.appendChild(document.createTextNode(t.name + " " + t.capacity + "ml"));
-        select.appendChild(option);
+        nameSelect.appendChild(option);
       }
     }
-
   }
 
-  input.name = 'number';
-  input.type = 'number';
-  input.step = '1';
-  input.min = '0';
 
   while (container.childElementCount > 1) {
     container.removeChild(container.lastChild);
   }
 
-  container.appendChild(select);
-  container.appendChild(input);
+  container.appendChild(nameSelect);
+  container.appendChild(quantityInput);
 };
 
-const updateSupplyData = () => {
-  let divs = document.getElementById('selections').children;
-  for (let div of divs) {
-    console.log(div);
+function updateSupplyData(container) {
+  try {
+    supplyData[container.id] = {
+      category: container.children[0].value,
+      product_id: container.children[1].value,
+      quantity: container.children[2].value
+    };
+    console.log(supplyData);
+  } catch (e) {
+    if (e instanceof TypeError) {
+      console.log('no children mate');
+    } else {
+      console.log(e);
+    }
   }
-  console.log();
-  supply_data = {
-    supplier: document.getElementById('supplierInput').value,
-    date: document.getElementById('dateInput').value
-    // products: document.getElementById('selections').children.
+}
 
-  }
+const sendRequest = () => {
+  let sa = require('superagent');
 };
