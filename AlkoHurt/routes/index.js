@@ -105,7 +105,7 @@ router.get('/add-user', function (req, res, next) {
 
 router.post('/add_user', async function (req, res, next) {
   try {
-    await controller.addUser(req.login, req.password, req.user);
+    await controller.addUser(req.body.login, req.body.password, req.body.type);
     res.redirect('/');
   } catch (e) {
     console.log(e);

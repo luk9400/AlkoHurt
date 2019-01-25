@@ -1,6 +1,5 @@
 const mariadb = require('mariadb');
-
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs');
 const pool = mariadb.createPool({
   host: 'localhost',
   port: '3306',
@@ -84,13 +83,14 @@ async function planSupply(data) {
   }
 }
 
-module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor, getNames, planSupply};
-async function adduser(login, passsword, user) {
+async function addUser(login, password, type) {
   const conn = await pool.getConnection();
-  const hashPassword = await bcrypt.has(password, 10);
+  let hashPassword = await bcrypt.hash(password, 10, function (err, hashPassword) {
+  });
+  console.log(hashPassword);
   const query = 'INSERT INTO users (login, password, type) VALUES (?, ?, ?)';
-  await conn.query(query, [login, hashPassword, type])
+  await conn.query(query, [login, hashPassword, type]);
   conn.end();
 }
 
-module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor};
+module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor, addUser, planSupply};
