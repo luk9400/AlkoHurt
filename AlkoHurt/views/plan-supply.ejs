@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf8">
+    <title>Plan supply</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/javascripts/tools.js"></script>
+    <script>
+        let data = <%- JSON.stringify(data)%>;
+        let supply_data = {};
+    </script>
+</head>
+<body>
+<div class="container form" >
+    <h1>Plan supply</h1>
+    <form action="/plan_supply" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-form-label" for="supplierInput">Supplier name</label>
+                <input type="text" class="form-control" id="supplierInput" placeholder="Supplier" required="required" name="supplier">
+            </div>
+            <div class="form-group">
+                <label class="col-form-label" for="dateInput">Date</label>
+                <input type="date" min="" class="form-control" id="dateInput" required="required" name="date">
+            </div>
+            <div id="selections" class="col-form-label">
+            </div>
+            <button onclick="addNewProductField()" type="button" class="btn btn-primary btn-lg float-lg-left">Add product</button>
+            <button onclick="updateSupplyData()" type="submit" class="btn btn-primary btn-lg float-lg-right">Submit</button>
+        </fieldset>
+    </form>
+    <footer>
+        <%include footer.ejs%>
+    </footer>
+</div>
+</body>

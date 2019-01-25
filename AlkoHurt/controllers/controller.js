@@ -52,6 +52,39 @@ async function addLiquor(name, type, abv, capacity, price) {
   conn.end();
 }
 
+async function getNames() {
+  const conn = await pool.getConnection();
+  const types = ['beers', 'wines', 'liquors'];
+  let result = [];
+
+  for (type of types) {
+    try {
+      result.push({
+        name: type,
+        data: (await conn.query(`SELECT product_id, name, capacity FROM ${type}`))
+      });
+     } catch (e) {
+      console.log(e);
+    }
+  }
+
+  conn.end();
+  return result;
+}
+
+async function planSupply(data) {
+  const conn = await pool.getConnection();
+
+  try {
+    await conn.beginTransaction();
+    //
+    conn.commit();
+  } catch (e) {
+    conn.rollback();
+    console.log(e);
+  }
+}
+
 async function addUser(login, password, type) {
   const conn = await pool.getConnection();
   await bcrypt.hash(password, 10, async function (err, hashPassword) {
@@ -61,4 +94,4 @@ async function addUser(login, password, type) {
   conn.end();
 }
 
-module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor, addUser};
+module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor, addUser, planSupply, getNames};
