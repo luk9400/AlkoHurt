@@ -88,15 +88,17 @@ router.get('/plan-supply', async function (req, res) {
       res.render('plan-supply', {data: e});
     }).catch( e => {
       console.log(e);
-      res.redirect('/plan-supply');
+      res.redirect('/');
   });
 });
 
 router.post('/plan_supply', async function (req, res) {
   try {
-    // controller.planSupply(req.)
-  } catch (e) {
+    console.log(req.body);
+    await controller.planSupply(req.body.supplier, req.body.date, req.body.supplyData);
 
+  } catch (e) {
+    console.log(e);
   }
 });
 
@@ -104,7 +106,7 @@ router.get('/login', function (req, res) {
     res.render('login');
 });
 
-router.post('/login', function (req, res) {
+router.post('/login', async function (req, res) {
   try {
     req.session = await controller.login(req.body.login, req.body.password, req.session);
     console.log(req.session.login);
@@ -125,7 +127,7 @@ router.post('/add_user', async function (req, res, next) {
   } catch (e) {
     console.log(e);
   }
-})
+});
 
 
 
