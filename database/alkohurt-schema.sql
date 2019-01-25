@@ -47,7 +47,7 @@ CREATE TABLE wines (
 
 CREATE TABLE users (
   login    varchar(50) PRIMARY KEY,
-  password varchar(30),
+  password varchar(255),
   type     enum ('admin', 'manager', 'worker')
 );
 

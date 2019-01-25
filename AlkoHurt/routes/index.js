@@ -3,8 +3,15 @@ const router = express.Router();
 const controller = require('../controllers/controller');
 
 /* GET home page. */
-router.get('/', function(req, res) {
-  res.render('indexAdmin', { title: 'AlkoHurt' });
+router.get('/', function (req, res, next) {
+  if (req.session.login) {
+    res.render('indexAdmin', {
+      session: req.session,
+      result: ''
+    });
+  } else {
+    res.render('login');
+  }
 });
 
 router.get('/add-supplier', function (req, res) {
@@ -89,7 +96,7 @@ router.post('/plan_supply', async function (req, res) {
   try {
     // controller.planSupply(req.)
   } catch (e) {
-    
+
   }
 });
 
@@ -98,8 +105,13 @@ router.get('/login', function (req, res) {
 });
 
 router.post('/login', function (req, res) {
-    controller.test(req.body.name);
+  try {
+    req.session = await controller.login(req.body.login, req.body.password, req.session);
+    console.log(req.session.login);
     res.redirect('/');
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 router.get('/add-user', function (req, res, next) {

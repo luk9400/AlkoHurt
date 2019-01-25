@@ -11,21 +11,22 @@
     <form action="/login" method="post">
         <fieldset>
             <div class="form-group">
-                <label class="col-form-label" for="inputDefault">Login</label>
-                <input type="text" class="form-control" placeholder="login" id="inputDefault">
+                <label class="col-form-label" for="login">Login</label>
+                <input type="text" class="form-control" placeholder="Login" id="login" required="required" name="login">
             </div>
 
             <div class="form-group">
-                <label class="col-form-label" for="inputDefault">Password</label>
-                <input type="password" class="form-control" placeholder="********" id="inputDefault">
+                <label class="col-form-label" for="password">Password</label>
+                <input type="password" class="form-control" placeholder="Password" id="password" required="required" name="password">
             </div>
 
             <button type="submit" class="btn btn-primary">Login</button>
         </fieldset>
     </form>
+    <footer>
+        <%include footer%>
+    </footer>
 </div>
-<footer>
-    <%include footer%>
-</footer>
+
 </body>
 </html>
