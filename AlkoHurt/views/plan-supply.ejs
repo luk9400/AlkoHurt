@@ -25,14 +25,14 @@
                 <label class="col-form-label" for="dateInput">Date</label>
                 <input type="date" min="" class="form-control" id="dateInput" required="required" name="date">
             </div>
-            <ul id="selections">
-            </ul>
-            <button onclick="addNewProductField()" type="button" class="btn btn-primary btn-lg">Add product</button>
-            <button onclick="updateSupplyData()" type="submit" class="btn btn-primary btn-lg">Submit</button>
+            <div id="selections" class="col-form-label">
+            </div>
+            <button onclick="addNewProductField()" type="button" class="btn btn-primary btn-lg float-lg-left">Add product</button>
+            <button onclick="updateSupplyData()" type="submit" class="btn btn-primary btn-lg float-lg-right">Submit</button>
         </fieldset>
     </form>
+    <footer>
+        <%include footer.ejs%>
+    </footer>
 </div>
-<footer>
-    <%include footer.ejs%>
-</footer>
 </body>

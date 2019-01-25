@@ -37,3 +37,10 @@ body {
     min-width: 500px;
 }
 
+.product {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+

@@ -7,10 +7,19 @@ let category_id = 0;
 
 const addNewProductField = () => {
   let selections = document.getElementById('selections');
+  let labeledContainter = document.createElement('div');
   let container = document.createElement('div');
   let select = document.createElement('select');
   let types = ['Beers', 'Wines', 'Liquors'];
   let defaultOption = document.createElement('option');
+
+  let label = document.createElement('label');
+  label.className = 'col-form-label';
+  label.for = 'div';
+  label.appendChild(document.createTextNode('Product ' + (category_id+1).toString()));
+  labeledContainter.appendChild(label);
+
+  labeledContainter.className = 'form-group';
   defaultOption.disabled = true;
   defaultOption.selected = true;
   defaultOption.value = "";
@@ -29,10 +38,16 @@ const addNewProductField = () => {
     setSecondarySelect(container);
   });
 
-  container.setAttribute('id', category_id.toString());
+  container.classList.add('product');
+  container.classList.add('form-group');
+  container.setAttribute( 'id', category_id.toString());
+  select.id = 'category' + category_id;
   select.setAttribute('name', 'category');
   select.setAttribute('action', '/get_names');
-  selections.appendChild(container);
+
+  select.className = 'form-control';
+  labeledContainter.appendChild(container);
+  selections.appendChild(labeledContainter);
 
   category_id++;
   // updateFields(selections.childElementCount);
@@ -42,7 +57,11 @@ const setSecondarySelect = (container) => {
   let select = document.createElement('select');
   let input = document.createElement('input');
 
+  input.className = 'form-control';
+  select.className = 'form-control';
   select.name = 'name';
+  select.style.marginRight = '10px';
+  select.style.marginLeft = '10px';
 
   for (let obj of data) {
     console.log(obj);

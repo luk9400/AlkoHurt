@@ -79,7 +79,10 @@ router.get('/plan-supply', async function (req, res) {
     .then(e => {
       console.log(e);
       res.render('plan-supply', {data: e});
-    });
+    }).catch( e => {
+      console.log(e);
+      res.redirect('/plan-supply');
+  });
 });
 
 router.post('/plan_supply', async function (req, res) {

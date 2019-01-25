@@ -67,6 +67,7 @@ async function getNames() {
     }
   }
 
+  conn.end();
   return result;
 }
 
@@ -93,4 +94,4 @@ async function addUser(login, password, type) {
   conn.end();
 }
 
-module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor, addUser, planSupply};
+module.exports = {test, addSupplier, addClient, addWine, addBeer, addLiquor, addUser, planSupply, getNames};
