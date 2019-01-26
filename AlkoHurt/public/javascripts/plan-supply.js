@@ -4,7 +4,11 @@ window.addEventListener('load', (event) => {
 });
 
 let product_index = 0;
-let supplyData = [];
+let supplyData = {
+  supplier: null,
+  date: null,
+  products: []
+};
 
 const addNewProductField = () => {
   let selections = document.getElementById('selections');
@@ -44,7 +48,7 @@ const addNewProductField = () => {
 
   select.addEventListener('change', () => {
     setSecondarySelect(container);
-    updateSupplyData(container);
+    updateProductsData(container);
   });
 
 
@@ -70,10 +74,10 @@ const setSecondarySelect = (container) => {
   nameSelect.style.marginLeft = '10px';
 
   nameSelect.addEventListener('change', () => {
-    updateSupplyData(container);
+    updateProductsData(container);
   });
   quantityInput.addEventListener('change', () => {
-    updateSupplyData(container);
+    updateProductsData(container);
   });
 
   for (let obj of data) {
@@ -96,14 +100,18 @@ const setSecondarySelect = (container) => {
   container.appendChild(quantityInput);
 };
 
-function updateSupplyData(container) {
+function updateSupplierAndDate() {
+  supplyData.supplier = document.getElementById('supplierInput').value;
+  supplyData.date = document.getElementById('dateInput').value;
+}
+
+function updateProductsData(container) {
   try {
-    supplyData[container.id] = {
+    supplyData.products[container.id] = {
       category: container.children[0].value,
       product_id: container.children[1].value,
       quantity: container.children[2].value
     };
-    console.log(supplyData);
   } catch (e) {
     if (e instanceof TypeError) {
       console.log('no children mate');
@@ -114,5 +122,11 @@ function updateSupplyData(container) {
 }
 
 const sendRequest = () => {
-  let sa = require('superagent');
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST', '/plan_supply/', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  console.log(JSON.stringify(supplyData));
+  xhr.send(JSON.stringify(supplyData));
 };
+
+
