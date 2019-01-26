@@ -271,11 +271,11 @@ DELIMITER //
 CREATE PROCEDURE plan_supply(IN supply_date DATE, IN supplier VARCHAR(50))
 BEGIN
 
-INSERT INTO supplies (supply_date, done) VALUES (supply_date, supplier)
+INSERT INTO supplies (supply_date, done) VALUES (supply_date, supplier);
 END //
 
 DELIMITER //
 CREATE FUNCTION get_supplier_id(IN supplier VARCHAR(50)) RETURNS INT
 BEGIN
-  RETURN (SELECT
+  RETURN (SELECT);
 END //
