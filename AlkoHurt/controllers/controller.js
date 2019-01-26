@@ -98,14 +98,11 @@ async function login(login, password, session) {
     const query = 'SELECT password FROM users WHERE login = ?';
     const hashPassword = await conn.query(query, [login]);
     conn.end();
-    console.log(hashPassword[0].password);
-    console.log(password);
 
     let response = await bcrypt.compare(password, hashPassword[0].password);
 
     if (response) {
         session.login = login;
-        console.log('Weszło!');
     }
     return session;
 }

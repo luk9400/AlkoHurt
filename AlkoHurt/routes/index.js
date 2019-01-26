@@ -109,7 +109,6 @@ router.get('/login', function (req, res) {
 router.post('/login', async function (req, res) {
   try {
     req.session = await controller.login(req.body.login, req.body.password, req.session);
-    console.log(req.session.login);
     res.redirect('/');
   } catch (e) {
     console.log(e);
@@ -128,7 +127,5 @@ router.post('/add_user', async function (req, res, next) {
     console.log(e);
   }
 });
-
-
 
 module.exports = router;
