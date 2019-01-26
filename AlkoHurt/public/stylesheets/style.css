@@ -1,6 +1,5 @@
 body {
-    padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 .link {
@@ -14,6 +13,7 @@ body {
   align-items: center;
   height: 100%;
   width: 100%;
+  padding: 0;
 }
 
 #mainh1 {
@@ -33,25 +33,25 @@ body {
 }
 
 #footer {
-    margin-top: 40px;
-    min-width: 500px;
+  margin-top: 40px;
+  min-width: 500px;
 }
 
 .product {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .buttons {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 #status {
-    color: red;
+  color: red;
 }
 
 #user {
-    color: green;
+  color: green;
 }

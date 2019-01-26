@@ -9,6 +9,42 @@ const pool = mariadb.createPool({
   connectionLimit: 5
 });
 
+const poolapp = mariadb.createPool({
+  host: 'localhost',
+  port: '3306',
+  user: 'app',
+  password: 'apppassword',
+  database: 'alkohurt',
+  connectionLimit: 5
+});
+
+const pooladmin =  mariadb.createPool({
+  host: 'localhost',
+  port: '3306',
+  user: 'admin',
+  password: 'adminpassword',
+  database: 'alkohurt',
+  connectionLimit: 5
+});
+
+const poolmanager =  mariadb.createPool({
+  host: 'localhost',
+  port: '3306',
+  user: 'manager',
+  password: 'managerpassword',
+  database: 'alkohurt',
+  connectionLimit: 5
+});
+
+const poolworker =  mariadb.createPool({
+  host: 'localhost',
+  port: '3306',
+  user: 'worker',
+  password: 'workerpassword',
+  database: 'alkohurt',
+  connectionLimit: 5
+});
+
 async function addSupplier(name, nip, street, postal, city, phone, email) {
   const conn = await pool.getConnection();
   const query = 'INSERT INTO suppliers (name, nip, street_and_number, postal_code, city, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)';

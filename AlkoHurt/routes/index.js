@@ -5,7 +5,7 @@ const controller = require('../controllers/controller');
 /* GET home page. */
 router.get('/', function (req, res) {
   if (req.session.login) {
-    res.render('indexAdmin', {
+    res.render('index' + req.session.type, {
       nick: req.session.login,
       message: ''
     });
@@ -18,7 +18,7 @@ router.get('/add-supplier', function (req, res) {
   if (req.session.type === 'manager' || req.session.type === 'admin') {
     res.render('add-supplier');
   } else if (req.session.login) {
-    res.render('indexAdmin', {
+    res.render('index' + req.session.type, {
       nick: req.session.login,
       message: "You don't have permission to do that"
     })
@@ -36,7 +36,7 @@ router.post('/add_supplier', function (req, res) {
       console.log(e);
     }
   } else if (req.session.login) {
-    res.render('indexAdmin', {
+    res.render('index' + req.session.type, {
       nick: req.session.login,
       message: "You don't have permission to do that"
     })
@@ -142,8 +142,6 @@ router.post('/login', async function (req, res) {
 });
 
 router.get('/add-user', function (req, res) {
-  console.log(req.session.type);
-  console.log(req.session);
   if (req.session.type === 'admin') {
     res.render('add-user');
   } else if (req.session.login) {
@@ -172,6 +170,12 @@ router.post('/add_user', async function (req, res) {
   } else {
     res.redirect('/login');
   }
+});
+
+router.get('/logout', function (req, res) {
+  req.session.login = undefined;
+  req.session.type = undefined;
+  res.redirect('/login');
 });
 
 module.exports = router;
