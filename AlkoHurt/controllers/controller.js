@@ -134,35 +134,28 @@ async function getNames() {
 
 async function planSupply(supplyData) {
   const conn = await pool.getConnection();
-  const supplier = supplyData.supplier;
+  const supplier_id = supplyData.supplier;
   const date = supplyData.date;
   const products = supplyData.products;
 
-  console.log(supplier, date, products);
+  console.log(supplier_id, date, products);
 
   await conn.beginTransaction()
     .then(async () => {
-      await conn.query('SELECT supplier_id FROM suppliers WHERE name = ?', [supplier])
-        .then(async e => {
-          const supplier_id = e[0].supplier_id;
-          console.log(supplier_id);
-          const newSupply =
-            'INSERT INTO supplies(supply_date, supplier_id, done) VALUES (?, ?, ?)';
+      const newSupply =
+        'INSERT INTO supplies(supply_date, supplier_id, done) VALUES (?, ?, ?)';
 
-          let supply_id;
+      await conn.query(newSupply, [date, supplier_id, false])
+        .then(async (e) => {
+          const lastid = e.insertId;
+          console.log('last insert id: ' + lastid);
 
-          await conn.query(newSupply, [date, supplier_id, false])
-            .then(async (e) => {
-              const lastid = e.insertId
-              console.log('last insert id: ' + lastid);
+          for (let product of products) {
+            conn.query('INSERT INTO supplies_info(product_id, supply_id, quantity) VALUES (?, ?, ?)',
+              [product.product_id, lastid, product.quantity]);
+          }
 
-              for (let product of products) {
-                conn.query('INSERT INTO supplies_info(product_id, supply_id, quantity) VALUES (?, ?, ?)',
-                  [product.product_id, lastid, product.quantity]);
-              }
-
-              console.log("Inserted");
-            });
+          console.log("Inserted");
         });
       conn.commit();
     }).catch(e => {
@@ -214,7 +207,10 @@ async function getSupplies() {
         supplier: (await conn.query(
           'SELECT name FROM supplies JOIN suppliers ON supplies.supplier_id = suppliers.supplier_id WHERE supply_id = ?',
           [supply_id]
-        ))[0].name
+        ))[0].name,
+        products: (await conn.query('SELECT name, capacity, s.quantity' +
+          ' FROM supplies_info s JOIN products p on s.product_id = p.product_id ' +
+          ' WHERE supply_id = ?', [supply_id]))
       });
     } catch (e) {
       console.log(e);

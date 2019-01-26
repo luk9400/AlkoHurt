@@ -123,12 +123,12 @@ router.post('/plan_supply/', async function (req, res) {
   await controller.planSupply(req.body)
     .then(() => {
       console.log("Supply planned");
+      res.redirect('/');
     })
     .catch(e => {
       console.log(e);
       res.redirect('/');
     });
-  res.redirect('/');
 });
 
 router.get('/update-supply/', async function (req, res) {

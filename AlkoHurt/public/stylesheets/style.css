@@ -56,3 +56,7 @@ body {
 #user {
   color: green;
 }
+
+#navbar {
+    margin-bottom: 30px;
+}
