@@ -21,17 +21,20 @@ const fillSupplyInfo = () => {
   const supplyInfoDiv = document.getElementById('supplyInfo');
   const supplySelect = document.getElementById('supplySelect');
 
+  while(supplyInfoDiv.lastChild) {
+    supplyInfoDiv.removeChild(supplyInfoDiv.lastChild);
+  }
+
   for (let supply of data) {
     console.log(supplySelect.value + ' ? ' + supply.supply_id);
     if (supply.supply_id.toString() === supplySelect.value.toString()) {
-      console.log('dupa');
-      console.log(...supply.products);
-      let p = document.createElement('p');
-      p.appendChild(document.createTextNode(JSON.stringify(...supply.products)));
-      while(supplyInfoDiv.lastChild) {
-        supplyInfoDiv.removeChild(supplyInfoDiv.lastChild);
-      }
-      supplyInfoDiv.appendChild(p);
+      let h = document.createElement('h4');
+      h.appendChild(document.createTextNode(supply.supplier + ' | ' + supply.date));
+      supplyInfoDiv.appendChild(h);
+
+      let pre = document.createElement('pre');
+      pre.appendChild(document.createTextNode(JSON.stringify(supply.products, null, 2)));
+      supplyInfoDiv.appendChild(pre);
     }
   }
 
