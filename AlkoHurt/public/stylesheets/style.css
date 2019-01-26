@@ -48,4 +48,10 @@ body {
     justify-content: space-between;
 }
 
+#status {
+    color: red;
+}
 
+#user {
+    color: green;
+}
