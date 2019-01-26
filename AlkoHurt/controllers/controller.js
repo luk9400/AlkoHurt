@@ -10,7 +10,7 @@ const pool = mariadb.createPool({
   connectionLimit: 5
 });
 
-const poolapp = mariadb.createPool({
+const poolApp = mariadb.createPool({
   host: 'localhost',
   port: '3306',
   user: 'app',
@@ -19,7 +19,7 @@ const poolapp = mariadb.createPool({
   connectionLimit: 5
 });
 
-const pooladmin =  mariadb.createPool({
+const poolAdmin =  mariadb.createPool({
   host: 'localhost',
   port: '3306',
   user: 'admin',
@@ -28,7 +28,7 @@ const pooladmin =  mariadb.createPool({
   connectionLimit: 5
 });
 
-const poolmanager =  mariadb.createPool({
+const poolManager =  mariadb.createPool({
   host: 'localhost',
   port: '3306',
   user: 'manager',
@@ -37,7 +37,7 @@ const poolmanager =  mariadb.createPool({
   connectionLimit: 5
 });
 
-const poolworker =  mariadb.createPool({
+const poolWorker =  mariadb.createPool({
   host: 'localhost',
   port: '3306',
   user: 'worker',
@@ -45,6 +45,13 @@ const poolworker =  mariadb.createPool({
   database: 'alkohurt',
   connectionLimit: 5
 });
+
+const pools = {
+  app: poolApp,
+  admin: poolAdmin,
+  manager: poolManager,
+  worker: poolWorker
+};
 
 async function addSupplier(name, nip, street, postal, city, phone, email) {
   const conn = await pool.getConnection();
