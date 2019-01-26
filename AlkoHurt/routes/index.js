@@ -110,7 +110,7 @@ router.post('/add_liquor', async function (req, res) {
 router.get('/plan-supply', async function (req, res) {
   controller.getNames()
     .then(e => {
-      console.log(e);
+      // console.log(e);
       res.render('plan-supply', {data: e});
     }).catch(e => {
     console.log(e);
@@ -118,14 +118,17 @@ router.get('/plan-supply', async function (req, res) {
   });
 });
 
-router.post('/plan_supply', async function (req, res) {
-  try {
-    console.log(req.body);
-    await controller.planSupply(req.body.supplier, req.body.date, req.body.supplyData);
-
-  } catch (e) {
-    console.log(e);
-  }
+router.post('/plan_supply/', async function (req, res) {
+  // console.log(req.body);
+  await controller.planSupply(req.body)
+    .then(() => {
+      console.log("Supply planned");
+    })
+    .catch(e => {
+      console.log(e);
+      res.redirect('/');
+    });
+  res.redirect('/');
 });
 
 router.get('/login', function (req, res) {
@@ -173,5 +176,6 @@ router.post('/add_user', async function (req, res) {
     res.redirect('/login');
   }
 });
+
 
 module.exports = router;

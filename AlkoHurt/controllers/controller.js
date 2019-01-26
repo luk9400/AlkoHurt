@@ -1,5 +1,6 @@
 const mariadb = require('mariadb');
 const bcrypt = require('bcryptjs');
+
 const pool = mariadb.createPool({
   host: 'localhost',
   port: '3306',
@@ -67,19 +68,42 @@ async function getNames() {
   return result;
 }
 
-async function planSupply(supplier, date, supplyData) {
+async function planSupply(supplyData) {
   const conn = await pool.getConnection();
-  console.log(supplier, date, supplyData);
-  // try {
-  //   await conn.beginTransaction();
-  //   // for (let product of supplyData) {
-  //   //   console.log(product.product_id);
-  //   // }
-  //   conn.commit();
-  // } catch (e) {
-  //   conn.rollback();
-  //   console.log(e);
-  // }
+  const supplier = supplyData.supplier;
+  const date = supplyData.date;
+  const products = supplyData.products;
+
+  console.log(supplier, date, products);
+
+  await conn.beginTransaction()
+    .then(async () => {
+      await conn.query('SELECT supplier_id FROM suppliers WHERE name = ?', [supplier])
+        .then(async e => {
+          const supplier_id = e[0].supplier_id;
+          console.log(supplier_id);
+          const newSupply =
+            'INSERT INTO supplies(supply_date, supplier_id, done) VALUES (?, ?, ?)';
+
+          let supply_id;
+
+          await conn.query(newSupply, [date, supplier_id, false])
+            .then(async (e) => {
+              const lastid = e.insertId
+              console.log('last insert id: ' + lastid);
+
+              for (let product of products) {
+                conn.query('INSERT INTO supplies_info(product_id, supply_id, quantity) VALUES (?, ?, ?)',
+                  [product.product_id, lastid, product.quantity]);
+              }
+
+              console.log("Inserted");
+            });
+        });
+      conn.commit();
+    }).catch(e => {
+      console.log(e);
+    });
 
   conn.end();
 }
@@ -109,4 +133,7 @@ async function login(login, password, type, session) {
   return session;
 }
 
-module.exports = {addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login};
+module.exports = {
+  addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login,
+  getNames, planSupply
+};

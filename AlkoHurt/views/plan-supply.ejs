@@ -14,15 +14,15 @@
 <body>
 <div class="container form" >
     <h1>Plan supply</h1>
-    <form action="/plan_supply" method="post" >
+    <form onsubmit="sendRequest()">
         <fieldset>
             <div class="form-group">
                 <label class="col-form-label" for="supplierInput">Supplier name</label>
-                <input type="text" class="form-control" id="supplierInput" placeholder="Supplier" required="required" name="supplier">
+                <input onchange=updateSupplierAndDate() type="text" class="form-control" id="supplierInput" placeholder="Supplier" required="required" name="supplier">
             </div>
             <div class="form-group">
                 <label class="col-form-label" for="dateInput">Date</label>
-                <input type="date" min="" class="form-control" id="dateInput" required="required" name="date">
+                <input onchange="updateSupplierAndDate()" type="date" min="" class="form-control" id="dateInput" required="required">
             </div>
             <div id="selections" class="col-form-label">
             </div>
