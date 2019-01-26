@@ -55,3 +55,7 @@ body {
 #user {
   color: green;
 }
+
+#navbar {
+    margin-bottom: 50px;
+}
