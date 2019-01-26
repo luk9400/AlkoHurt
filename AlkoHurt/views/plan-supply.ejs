@@ -13,13 +13,15 @@
 </head>
 <%include navbar%>
 <body>
-<div class="container form" >
+<div class="container form">
     <h1>Plan supply</h1>
     <form onsubmit="sendRequest()">
         <fieldset>
             <div class="form-group">
-                <label class="col-form-label" for="supplierInput">Supplier name</label>
-                <input onchange=updateSupplierAndDate() type="text" class="form-control" id="supplierInput" placeholder="Supplier" required="required" name="supplier">
+                <label class="col-form-label" for="supplierSelect">Supplier</label>
+                <select onchange=updateSupplierAndDate() class="form-control" id="supplierSelect" required name="supplier">
+
+                </select>
             </div>
             <div class="form-group">
                 <label class="col-form-label" for="dateInput">Date</label>
@@ -28,8 +30,10 @@
             <div id="selections" class="col-form-label">
             </div>
             <div class="buttons">
+                <button onclick="location.href='/'" type="button" class="btn btn-primary btn-lg ">Back</button>
                 <button onclick="addNewProductField()" type="button" class="btn btn-primary btn-lg">Add product</button>
                 <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+
             </div>
         </fieldset>
     </form>

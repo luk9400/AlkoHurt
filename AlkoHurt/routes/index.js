@@ -131,6 +131,19 @@ router.post('/plan_supply/', async function (req, res) {
   res.redirect('/');
 });
 
+router.get('/update-supply/', async function (req, res) {
+  controller.getSupplies()
+    .then(e => {
+      console.log(e);
+      res.render('update-supply', {data: e});
+    });
+});
+
+router.post('/update_supply', async function (req, res) {
+  controller.updateSupply(req.body.supplySelect);
+  res.redirect('/');
+});
+
 router.get('/login', function (req, res) {
   res.render('login');
 });

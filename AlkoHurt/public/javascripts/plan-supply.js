@@ -1,6 +1,7 @@
 window.addEventListener('load', (event) => {
   console.log(data);
   addNewProductField();
+  fillSuppliersSelect();
 });
 
 let product_index = 0;
@@ -23,12 +24,11 @@ const addNewProductField = () => {
   label.for = 'div';
   label.appendChild(document.createTextNode('Product ' + (product_index + 1).toString()));
   labeledContainter.appendChild(label);
-
+  // select.placeholder = 'Product type'
   labeledContainter.className = 'form-group';
   defaultOption.disabled = true;
   defaultOption.selected = true;
-  defaultOption.value = "";
-  defaultOption.appendChild(document.createTextNode('--select product type--'));
+  defaultOption.appendChild(document.createTextNode('Product type'));
   select.appendChild(defaultOption);
   for (type of types) {
     let option = document.createElement('option');
@@ -50,7 +50,6 @@ const addNewProductField = () => {
     setSecondarySelect(container);
     updateProductsData(container);
   });
-
 
   labeledContainter.appendChild(container);
   selections.appendChild(labeledContainter);
@@ -80,7 +79,7 @@ const setSecondarySelect = (container) => {
     updateProductsData(container);
   });
 
-  for (let obj of data) {
+  for (let obj of data.productsData) {
     if (container.children[0].value.toLowerCase() === obj.name) {
       for (let t of obj.data) {
         let option = document.createElement('option');
@@ -101,7 +100,7 @@ const setSecondarySelect = (container) => {
 };
 
 function updateSupplierAndDate() {
-  supplyData.supplier = document.getElementById('supplierInput').value;
+  supplyData.supplier = document.getElementById('supplierSelect').value;
   supplyData.date = document.getElementById('dateInput').value;
 }
 
@@ -120,6 +119,17 @@ function updateProductsData(container) {
     }
   }
 }
+
+const fillSuppliersSelect = () => {
+  let supplierSelect = document.getElementById('supplierSelect');
+
+  for (let supplier of data.suppliers) {
+    let option = document.createElement('option');
+    option.value = supplier.supplier_id;
+    option.appendChild(document.createTextNode(supplier.name));
+    supplierSelect.appendChild(option);
+  }
+};
 
 const sendRequest = () => {
   let xhr = new XMLHttpRequest();

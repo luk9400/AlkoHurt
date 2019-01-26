@@ -8,6 +8,7 @@ body {
 }
 
 .framka {
+    margin-top: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,8 +55,4 @@ body {
 
 #user {
   color: green;
-}
-
-#navbar {
-    margin-bottom: 50px;
 }

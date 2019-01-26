@@ -7,6 +7,7 @@ const pool = mariadb.createPool({
   user: 'root',
   password: 'password',
   database: 'alkohurt',
+  dateStrings: 'date',
   connectionLimit: 5
 });
 
@@ -94,11 +95,25 @@ async function addLiquor(name, type, abv, capacity, price) {
 async function getNames() {
   const conn = await pool.getConnection();
   const types = ['beers', 'wines', 'liquors'];
-  let result = [];
+  let productsData = [];
+  let suppliers = [];
+  try {
+    await conn.query('SELECT supplier_id, name FROM suppliers')
+      .then(result => {
+        for (let el of result) {
+          if (el !== 'meta') {
+            suppliers.push(el);
+          }
+        }
+      });
+  } catch (e) {
+    console.log(e);
+  }
+  console.log(suppliers);
 
   for (type of types) {
     try {
-      result.push({
+      productsData.push({
         name: type,
         data: (await conn.query(`SELECT product_id, name, capacity FROM ${type}`))
       });
@@ -106,9 +121,15 @@ async function getNames() {
       console.log(e);
     }
   }
-
+  console.log(productsData);
   conn.end();
-  return result;
+
+  let results = {
+    suppliers: suppliers,
+    productsData: productsData
+  };
+
+  return results;
 }
 
 async function planSupply(supplyData) {
@@ -176,7 +197,47 @@ async function login(login, password, type, session) {
   return session;
 }
 
+async function getSupplies() {
+  const conn = await pool.getConnection();
+
+  let supplies = [];
+
+  let supplies_ids = (await conn.query('SELECT supply_id FROM supplies WHERE done = 0')).map(e => e.supply_id);
+
+  console.log(supplies_ids);
+
+  for (let supply_id of supplies_ids) {
+    try {
+      supplies.push({
+        supply_id: supply_id,
+        date: (await conn.query('SELECT supply_date FROM supplies WHERE supply_id = ?', [supply_id]))[0].supply_date,
+        supplier: (await conn.query(
+          'SELECT name FROM supplies JOIN suppliers ON supplies.supplier_id = suppliers.supplier_id WHERE supply_id = ?',
+          [supply_id]
+        ))[0].name
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  conn.end();
+
+  return supplies;
+}
+
+async function updateSupply(supply_id) {
+  const conn = await pool.getConnection();
+
+  await conn.query('UPDATE supplies SET done = 1 WHERE supply_id = ?', [supply_id])
+    .then(e => {
+      console.log(e);
+      console.log('Supply made done :)')
+    });
+
+  conn.end();
+}
 module.exports = {
   addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login,
-  getNames, planSupply
+  getNames, planSupply, getSupplies, updateSupply
 };
