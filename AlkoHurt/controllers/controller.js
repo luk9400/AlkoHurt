@@ -1,5 +1,7 @@
 const mariadb = require('mariadb');
 const bcrypt = require('bcryptjs');
+const { exec } = require('child_process');
+const fs = require('fs');
 
 const pool = mariadb.createPool({
   host: 'localhost',
@@ -387,8 +389,23 @@ async function quantityOnDate(product_id, date) {
   return quantity;
 }
 
+function createBackup() {
+  const date = new Date();
+  exec('mysqldump -u admin -p adminpassword alkohurt', (error, stdout, stderr) => {
+    if (error) {
+      throw error;
+    }
+    fs.writeFile(`${date.getTime()}`, stdout, (err) => {
+      if (err) {
+        throw err;
+      }
+    });
+  });
+  console.log('Done');
+}
+
 module.exports = {
   addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login,
   getNames, planSupply, getSupplies, updateSupply, getPlanSaleData, planSale,
-  getSales, updateSale, getProducts, quantityOnDate
+  getSales, updateSale, getProducts, quantityOnDate, createBackup
 };
