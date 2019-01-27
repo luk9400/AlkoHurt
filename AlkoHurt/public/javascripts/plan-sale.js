@@ -1,19 +1,29 @@
 window.addEventListener('load', () => {
   console.log(data);
-  addNewProductField();
-  fillSuppliersSelect();
+  // addNewProductField();
+  fillClientsSelect();
 });
 
 let product_index = 0;
-let supplyData = {
-  supplier: null,
+let saleData = {
+  client: null,
   date: null,
   products: []
+};
+const fillClientsSelect = () => {
+  let clientSelect = document.getElementById('clientSelect');
+
+  for (let client of data.clients) {
+    let option = document.createElement('option');
+    option.value = client.client_id;
+    option.appendChild(document.createTextNode(client.name));
+    clientSelect.appendChild(option);
+  }
 };
 
 const addNewProductField = () => {
   let selections = document.getElementById('selections');
-  let labeledContainter = document.createElement('div');
+  let labeledContainer = document.createElement('div');
   let container = document.createElement('div');
   let select = document.createElement('select');
   let types = ['Beers', 'Wines', 'Liquors'];
@@ -23,9 +33,9 @@ const addNewProductField = () => {
   label.className = 'col-form-label';
   label.for = 'div';
   label.appendChild(document.createTextNode('Product ' + (product_index + 1).toString()));
-  labeledContainter.appendChild(label);
+  labeledContainer.appendChild(label);
   // select.placeholder = 'Product type'
-  labeledContainter.className = 'form-group';
+  labeledContainer.className = 'form-group';
   defaultOption.disabled = true;
   defaultOption.selected = true;
   defaultOption.appendChild(document.createTextNode('Product type'));
@@ -51,31 +61,55 @@ const addNewProductField = () => {
     updateProductsData(container);
   });
 
-  labeledContainter.appendChild(container);
-  selections.appendChild(labeledContainter);
+  labeledContainer.appendChild(container);
+  selections.appendChild(labeledContainer);
 
   product_index++;
 };
 
 const setSecondarySelect = (container) => {
   let nameSelect = document.createElement('select');
-  let quantityInput = document.createElement('input');
+  let quantitySelect = document.createElement('select');
 
-  quantityInput.className = 'form-control';
-  quantityInput.type = 'number';
-  quantityInput.placeholder = 'Quantity';
-  quantityInput.setAttribute('required', 'required');
-  quantityInput.step = '1';
-  quantityInput.min = '1';
+  quantitySelect.className = 'form-control';
+  quantitySelect.type = 'number';
+  quantitySelect.placeholder = 'Quantity';
+  quantitySelect.setAttribute('required', 'required');
+  quantitySelect.step = '1';
+  quantitySelect.min = '1';
+
   nameSelect.setAttribute('required', 'required');
   nameSelect.className = 'form-control';
   nameSelect.style.marginRight = '10px';
   nameSelect.style.marginLeft = '10px';
 
+  const updateQuantitySelect = () => {
+    while (quantitySelect.lastChild) {
+      quantitySelect.removeChild(quantitySelect.lastChild);
+    }
+
+    const max = JSON.parse(nameSelect.value).quantity;
+    if (max === 0) {
+      let option = document.createElement('option');
+      option.value = 0;
+      option.appendChild(document.createTextNode('0'));
+      quantitySelect.appendChild(option);
+    } else {
+      for (let i = 1; i <= max; i++) {
+        let option = document.createElement('option');
+        option.value = i;
+        option.appendChild(document.createTextNode(i.toString()));
+        quantitySelect.appendChild(option);
+      }
+    }
+  };
+
   nameSelect.addEventListener('change', () => {
     updateProductsData(container);
+    updateQuantitySelect();
   });
-  quantityInput.addEventListener('change', () => {
+
+  quantitySelect.addEventListener('change', () => {
     updateProductsData(container);
   });
 
@@ -83,32 +117,30 @@ const setSecondarySelect = (container) => {
     if (container.children[0].value.toLowerCase() === obj.name) {
       for (let t of obj.data) {
         let option = document.createElement('option');
-        option.value = t.product_id;
+        option.value = JSON.stringify({
+          product_id: t.product_id,
+          quantity: t.quantity
+        });
         option.appendChild(document.createTextNode(t.name + " " + t.capacity + "ml"));
         nameSelect.appendChild(option);
       }
     }
   }
 
-
   while (container.childElementCount > 1) {
     container.removeChild(container.lastChild);
   }
 
+  updateQuantitySelect();
   container.appendChild(nameSelect);
-  container.appendChild(quantityInput);
+  container.appendChild(quantitySelect);
 };
-
-function updateSupplierAndDate() {
-  supplyData.supplier = document.getElementById('supplierSelect').value;
-  supplyData.date = document.getElementById('dateInput').value;
-}
 
 function updateProductsData(container) {
   try {
-    supplyData.products[container.id] = {
+    saleData.products[container.id] = {
       category: container.children[0].value,
-      product_id: container.children[1].value,
+      product_id: JSON.parse(container.children[1].value).product_id,
       quantity: container.children[2].value
     };
   } catch (e) {
@@ -118,25 +150,18 @@ function updateProductsData(container) {
       console.log(e);
     }
   }
+  console.log(saleData);
 }
 
-const fillSuppliersSelect = () => {
-  let supplierSelect = document.getElementById('supplierSelect');
-
-  for (let supplier of data.suppliers) {
-    let option = document.createElement('option');
-    option.value = supplier.supplier_id;
-    option.appendChild(document.createTextNode(supplier.name));
-    supplierSelect.appendChild(option);
-  }
-};
+function updateClientAndDate() {
+  saleData.client = document.getElementById('clientSelect').value;
+  saleData.date = document.getElementById('dateInput').value;
+}
 
 const sendRequest = () => {
   let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/plan_supply', true);
+  xhr.open('POST', '/plan_sale', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
-  console.log(JSON.stringify(supplyData));
-  xhr.send(JSON.stringify(supplyData));
+  console.log(JSON.stringify(saleData));
+  xhr.send(JSON.stringify(saleData));
 };
-
-

@@ -53,7 +53,7 @@ router.get('/add-client', function (req, res) {
   }
 });
 
-router.get('/add_client', function (req, res) {
+router.post('/add_client', function (req, res) {
   if (req.session.login) {
     try {
       controller.addClient(req.body.name, req.body.nip, req.body.street, req.body.postal, req.body.city, req.body.phone, req.body.email);
@@ -107,6 +107,27 @@ router.post('/add_liquor', async function (req, res) {
   }
 });
 
+router.get('/plan-sale', async function (req, res) {
+  controller.getPlanSaleData()
+    .then(e => {
+      res.render('plan-sale', {data: e});
+    }).catch(e => {
+      console.log(e);
+  })
+});
+
+router.post('/plan_sale', async function (req, res) {
+  await controller.planSale(req.body)
+    .then(() => {
+      console.log("Sale planned");
+      res.redirect('/');
+    })
+    .catch(e => {
+      console.log(e);
+      res.redirect('/');
+    });
+});
+
 router.get('/plan-supply', async function (req, res) {
   controller.getNames()
     .then(e => {
@@ -118,7 +139,7 @@ router.get('/plan-supply', async function (req, res) {
   });
 });
 
-router.post('/plan_supply/', async function (req, res) {
+router.post('/plan_supply', async function (req, res) {
   // console.log(req.body);
   await controller.planSupply(req.body)
     .then(() => {

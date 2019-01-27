@@ -64,7 +64,7 @@ async function addSupplier(name, nip, street, postal, city, phone, email) {
 
 async function addClient(name, nip, street, postal, city, phone, email) {
   const conn = await pool.getConnection();
-  const query = 'INSERT INTO client (name, nip, street_and_number, postal_code, city, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO clients (name, nip, street_and_number, postal_code, city, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)';
   await conn.query(query, [name, nip, street, postal, city, phone, email]);
   conn.end();
   return query;
@@ -124,12 +124,83 @@ async function getNames() {
   console.log(productsData);
   conn.end();
 
-  let results = {
+  return {
     suppliers: suppliers,
     productsData: productsData
   };
+}
 
-  return results;
+async function getPlanSaleData() {
+  const conn = await pool.getConnection();
+  const types = ['beers', 'wines', 'liquors'];
+  let productsData = [];
+  let clients = [];
+
+  try {
+    await conn.query('SELECT client_id, name, nip FROM clients')
+      .then(result => {
+        for (let el of result) {
+          if (el !== 'meta') {
+            clients.push(el);
+          }
+        }
+      });
+  } catch (e) {
+    console.log(e);
+  }
+  console.log(clients);
+
+  for (type of types) {
+    try {
+      productsData.push({
+        name: type,
+        data: (await conn.query(`SELECT t.product_id, t.name, t.capacity, quantity FROM ${type} t` +
+          ` JOIN products p on t.product_id = p.product_id`))
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  console.log(productsData);
+  conn.end();
+
+  return {
+    clients: clients,
+    productsData: productsData
+  };
+}
+
+async function planSale(saleData) {
+  const conn = await pool.getConnection();
+  const client_id = saleData.client;
+  const date = saleData.date;
+  const products = saleData.products;
+
+  console.log(client_id, date, products);
+
+  await conn.beginTransaction()
+    .then(async () => {
+      const newSale =
+        'INSERT INTO sales(sale_date, client_id, done) VALUES (?, ?, ?)';
+
+      await conn.query(newSale, [date, client_id, false])
+        .then(async (e) => {
+          const lastId = e.insertId;
+          console.log('last insert id: ' + lastId);
+
+          for (let product of products) {
+            conn.query('INSERT INTO sales_info(product_id, sale_id, quantity) VALUES (?, ?, ?)',
+              [product.product_id, lastId, product.quantity]);
+          }
+
+          console.log("Inserted");
+        });
+      conn.commit();
+    }).catch(e => {
+      console.log(e);
+    });
+
+  conn.end();
 }
 
 async function planSupply(supplyData) {
@@ -233,7 +304,8 @@ async function updateSupply(supply_id) {
 
   conn.end();
 }
+
 module.exports = {
   addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login,
-  getNames, planSupply, getSupplies, updateSupply
+  getNames, planSupply, getSupplies, updateSupply, getPlanSaleData, planSale
 };
