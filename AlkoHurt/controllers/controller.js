@@ -3,16 +3,6 @@ const bcrypt = require('bcryptjs');
 const { exec } = require('child_process');
 const fs = require('fs');
 
-const pool = mariadb.createPool({
-  host: 'localhost',
-  port: '3306',
-  user: 'root',
-  password: 'password',
-  database: 'alkohurt',
-  dateStrings: 'date',
-  connectionLimit: 5
-});
-
 const poolApp = mariadb.createPool({
   host: 'localhost',
   port: '3306',
@@ -49,53 +39,53 @@ const poolWorker =  mariadb.createPool({
   connectionLimit: 5
 });
 
-const pools = {
-  app: poolApp,
-  admin: poolAdmin,
-  manager: poolManager,
-  worker: poolWorker
+const pool = {
+    app: poolApp,
+    admin: poolAdmin,
+    manager: poolManager,
+    worker: poolWorker
 };
 
-async function addSupplier(name, nip, street, postal, city, phone, email) {
-  const conn = await pool.getConnection();
+async function addSupplier(type, name, nip, street, postal, city, phone, email) {
+  const conn = await pool[type].getConnection();
   const query = 'INSERT INTO suppliers (name, nip, street_and_number, postal_code, city, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)';
   await conn.query(query, [name, nip, street, postal, city, phone, email]);
   conn.end();
   return query;
 }
 
-async function addClient(name, nip, street, postal, city, phone, email) {
-  const conn = await pool.getConnection();
+async function addClient(type, name, nip, street, postal, city, phone, email) {
+  const conn = await pool[userType].getConnection();
   const query = 'INSERT INTO clients (name, nip, street_and_number, postal_code, city, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)';
   await conn.query(query, [name, nip, street, postal, city, phone, email]);
   conn.end();
   return query;
 }
 
-async function addWine(name, color, abv, type, capacity, country_of_origin, price) {
-  const conn = await pool.getConnection();
+async function addWine(userType, name, color, abv, type, capacity, country_of_origin, price) {
+  const conn = await pool[userType].getConnection();
   const query = 'CALL add_wine(?, ?, ?, ?, ?, ?, ?)';
   await conn.query(query, [name, color, abv, type, capacity, country_of_origin, price]);
   conn.end();
 }
 
-async function addBeer(name, brewery, abv, type, capacity, container_type, price) {
+async function addBeer(userType, name, brewery, abv, type, capacity, container_type, price) {
   console.log(name, brewery, abv, type, capacity, container_type, price);
-  const conn = await pool.getConnection();
+  const conn = await pool[userType].getConnection();
   const query = 'CALL add_beer(?, ?, ?, ?, ?, ?, ?)';
   await conn.query(query, [name, brewery, abv, type, capacity, container_type, price]);
   conn.end();
 }
 
-async function addLiquor(name, type, abv, capacity, price) {
-  const conn = await pool.getConnection();
+async function addLiquor(userType, name, type, abv, capacity, price) {
+  const conn = await pool[userType].getConnection();
   const query = 'CALL add_liquor(?, ?, ?, ?, ?)';
   await conn.query(query, [name, type, abv, capacity, price]);
   conn.end();
 }
 
-async function getNames() {
-  const conn = await pool.getConnection();
+async function getNames(type) {
+  const conn = await pool[type].getConnection();
   const types = ['beers', 'wines', 'liquors'];
   let productsData = [];
   let suppliers = [];
@@ -132,8 +122,8 @@ async function getNames() {
   };
 }
 
-async function getPlanSaleData() {
-  const conn = await pool.getConnection();
+async function getPlanSaleData(type) {
+  const conn = await pool[type].getConnection();
   const types = ['beers', 'wines', 'liquors'];
   let productsData = [];
   let clients = [];
@@ -172,8 +162,8 @@ async function getPlanSaleData() {
   };
 }
 
-async function planSale(saleData) {
-  const conn = await pool.getConnection();
+async function planSale(type, saleData) {
+  const conn = await pool[type].getConnection();
   const client_id = saleData.client;
   const date = saleData.date;
   const products = saleData.products;
@@ -205,8 +195,8 @@ async function planSale(saleData) {
   conn.end();
 }
 
-async function planSupply(supplyData) {
-  const conn = await pool.getConnection();
+async function planSupply(type, supplyData) {
+  const conn = await pool[type].getConnection();
   const supplier_id = supplyData.supplier;
   const date = supplyData.date;
   const products = supplyData.products;
@@ -238,8 +228,8 @@ async function planSupply(supplyData) {
   conn.end();
 }
 
-async function addUser(login, password, type) {
-  const conn = await pool.getConnection();
+async function addUser(userType, login, password, type) {
+  const conn = await pool[userType].getConnection();
   await bcrypt.hash(password, 10, async function (err, hashPassword) {
     const query = 'INSERT INTO users (login, password, type) VALUES (?, ?, ?)';
     await conn.query(query, [login, hashPassword, type]);
@@ -248,7 +238,7 @@ async function addUser(login, password, type) {
 }
 
 async function login(login, password, session) {
-  const conn = await pool.getConnection();
+  const conn = await pool['app'].getConnection();
   const query = 'SELECT password, type FROM users WHERE login = ?';
   const result = await conn.query(query, [login]);
   conn.end();
@@ -263,8 +253,8 @@ async function login(login, password, session) {
   return session;
 }
 
-async function getSupplies() {
-  const conn = await pool.getConnection();
+async function getSupplies(type) {
+  const conn = await pool[type].getConnection();
 
   let supplies = [];
 
@@ -295,8 +285,8 @@ async function getSupplies() {
   return supplies;
 }
 
-async function updateSupply(supply_id) {
-  const conn = await pool.getConnection();
+async function updateSupply(type, supply_id) {
+  const conn = await pool[type].getConnection();
 
   await conn.query('CALL update_supply(?)', [supply_id])
     .then(e => {
@@ -307,8 +297,8 @@ async function updateSupply(supply_id) {
   conn.end();
 }
 
-async function getSales() {
-  const conn = await pool.getConnection();
+async function getSales(type) {
+  const conn = await pool[type].getConnection();
 
   let sales = [];
 
@@ -339,8 +329,8 @@ async function getSales() {
   return sales;
 }
 
-async function updateSale(sale_id) {
-  const conn = await pool.getConnection();
+async function updateSale(type, sale_id) {
+  const conn = await pool[type].getConnection();
 
   await conn.query('CALL update_sale(?)', [sale_id])
     .then(e => {
@@ -351,8 +341,8 @@ async function updateSale(sale_id) {
   conn.end();
 }
 
-async function getProducts() {
-  const conn = await pool.getConnection();
+async function getProducts(type) {
+  const conn = await pool[type].getConnection();
   const types = ['beers', 'wines', 'liquors'];
   let productsData = [];
 
@@ -374,8 +364,8 @@ async function getProducts() {
   };
 }
 
-async function quantityOnDate(product_id, date) {
-  const conn = await pool.getConnection();
+async function quantityOnDate(type, product_id, date) {
+  const conn = await pool[type].getConnection();
   let quantity = null;
 
   await conn.query('SELECT quantity_on_date(?, ?) as quantity', [product_id, date])

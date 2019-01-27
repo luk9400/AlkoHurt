@@ -32,7 +32,7 @@ router.get('/add-supplier', function (req, res) {
 router.post('/add_supplier', function (req, res) {
   if (req.session.type === 'manager' || req.session.type === 'admin') {
     try {
-      controller.addSupplier(req.body.name, req.body.nip, req.body.street, req.body.postal, req.body.city, req.body.phone, req.body.email);
+      controller.addSupplier(req.session.type, req.body.name, req.body.nip, req.body.street, req.body.postal, req.body.city, req.body.phone, req.body.email);
       res.redirect('/');
     } catch (e) {
       console.log(e);
@@ -60,7 +60,7 @@ router.get('/add-client', function (req, res) {
 router.post('/add_client', function (req, res) {
   if (req.session.login) {
     try {
-      controller.addClient(req.body.name, req.body.nip, req.body.street, req.body.postal, req.body.city, req.body.phone, req.body.email);
+      controller.addClient(req.session.type, req.body.name, req.body.nip, req.body.street, req.body.postal, req.body.city, req.body.phone, req.body.email);
       res.redirect('/');
     } catch (e) {
       console.log(e);
@@ -78,7 +78,7 @@ router.get('/add-wine', function (req, res) {
 
 router.post('/add_wine', async function (req, res) {
   try {
-    await controller.addWine(req.body.name, req.body.color, req.body.abv, req.body.type, req.body.capacity,
+    await controller.addWine(req.session.type, req.body.name, req.body.color, req.body.abv, req.body.type, req.body.capacity,
       req.body.country_of_origin, req.body.price);
     res.redirect('/')
   } catch (e) {
@@ -94,7 +94,7 @@ router.get('/add-beer', function (req, res) {
 
 router.post('/add_beer', async function (req, res) {
   try {
-    await controller.addBeer(req.body.name, req.body.brew, req.body.abv, req.body.type, req.body.capacity,
+    await controller.addBeer(req.session.type, req.body.name, req.body.brew, req.body.abv, req.body.type, req.body.capacity,
       req.body.container_type, req.body.price);
     res.redirect('/')
   } catch (e) {
@@ -110,7 +110,7 @@ router.get('/add-liquor', function (req, res) {
 
 router.post('/add_liquor', async function (req, res) {
   try {
-    await controller.addLiquor(req.body.name, req.body.type, req.body.abv, req.body.capacity, req.body.price);
+    await controller.addLiquor(req.session.type, req.body.name, req.body.type, req.body.abv, req.body.capacity, req.body.price);
     res.redirect('/')
   } catch (e) {
     console.log(e);
@@ -127,7 +127,7 @@ router.get('/plan-sale', async function (req, res) {
 });
 
 router.post('/plan_sale', async function (req, res) {
-  await controller.planSale(req.body)
+  await controller.planSale(req.session.type, req.body)
     .then(() => {
       console.log("Sale planned");
       res.redirect('/');
@@ -139,7 +139,7 @@ router.post('/plan_sale', async function (req, res) {
 });
 
 router.get('/update-sale', async function (req, res) {
-  controller.getSales()
+  controller.getSales(req.session.type)
     .then(e => {
       console.log(e);
       res.render('update-sale', {
@@ -150,13 +150,13 @@ router.get('/update-sale', async function (req, res) {
 });
 
 router.post('/update_sale', async function (req, res) {
-  controller.updateSale(req.body.saleSelect).then(() => {
+  controller.updateSale(req.session.type, req.body.saleSelect).then(() => {
     res.redirect('/');
   });
 });
 
 router.get('/plan-supply', async function (req, res) {
-  controller.getNames()
+  controller.getNames(req.session.type)
     .then(e => {
       // console.log(e);
       res.render('plan-supply', {
@@ -171,7 +171,7 @@ router.get('/plan-supply', async function (req, res) {
 
 router.post('/plan_supply', async function (req, res) {
   // console.log(req.body);
-  await controller.planSupply(req.body)
+  await controller.planSupply(req.session.type, req.body)
     .then(() => {
       console.log("Supply planned");
       res.redirect('/');
@@ -183,7 +183,7 @@ router.post('/plan_supply', async function (req, res) {
 });
 
 router.get('/update-supply', async function (req, res) {
-  controller.getSupplies()
+  controller.getSupplies(req.session.type)
     .then(e => {
       console.log(e);
       res.render('update-supply', {
@@ -194,13 +194,13 @@ router.get('/update-supply', async function (req, res) {
 });
 
 router.post('/update_supply', async function (req, res) {
-  controller.updateSupply(req.body.supplySelect).then(() => {
+  controller.updateSupply(req.session.type, req.body.supplySelect).then(() => {
     res.redirect('/');
   });
 });
 
 router.get('/show-quantity', async function (req, res) {
-  controller.getProducts()
+  controller.getProducts(req.session.type)
     .then(e => {
       res.render('show-quantity', {
         data: e,
@@ -210,7 +210,7 @@ router.get('/show-quantity', async function (req, res) {
 });
 
 router.post('/show_quantity', async function (req, res) {
-  controller.quantityOnDate(req.body.product_id, req.body.date)
+  controller.quantityOnDate(req.session.type, req.body.product_id, req.body.date)
     .then(e => {
       res.json({quantity: e});
     });
@@ -247,7 +247,7 @@ router.get('/add-user', function (req, res) {
 router.post('/add_user', async function (req, res) {
   if (req.session.type === 'admin') {
     try {
-      await controller.addUser(req.body.login, req.body.password, req.body.type);
+      await controller.addUser(req.session.type, req.body.login, req.body.password, req.body.type);
       res.redirect('/');
     } catch (e) {
       console.log(e);
