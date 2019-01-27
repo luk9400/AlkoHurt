@@ -288,4 +288,11 @@ CREATE TRIGGER IF NOT EXISTS update_quantity AFTER UPDATE ON supplies FOR EACH R
   END //
 DELIMITER ;
 
-DELETE from products WHERE name='piast';
+DELIMITER //
+CREATE TRIGGER IF NOT EXISTS delete_prodcuts AFTER DELETE ON products FOR EACH ROW
+  BEGIN
+    DELETE FROM beers WHERE beers.product_id = OLD.product_id;
+    DELETE FROM liquors WHERE liquors.product_id = OLD.product_id;
+    DELETE FROM wines WHERE wines.product_id = OLD.product_id;
+  END //
+DELIMITER ;
