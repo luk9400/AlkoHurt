@@ -268,4 +268,12 @@ router.get('/logout', function (req, res) {
   res.redirect('/login');
 });
 
+router.get('/backup', async function (req, res) {
+  if (req.session.type === 'admin') {
+    await controller.createBackup();
+  } else {
+    res.redirect('/');
+  }
+});
+
 module.exports = router;
