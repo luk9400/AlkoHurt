@@ -41,3 +41,5 @@ GRANT EXECUTE ON PROCEDURE alkohurt.add_wine TO manager;
 
 GRANT INSERT ON alkohurt.users TO admin;
 GRANT DELETE ON alkohurt.users TO admin;
+
+GRANT SELECT on alkohurt.users TO 'app'@'localhost';
