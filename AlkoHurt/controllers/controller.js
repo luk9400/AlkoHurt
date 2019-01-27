@@ -245,7 +245,7 @@ async function addUser(login, password, type) {
   conn.end();
 }
 
-async function login(login, password, type, session) {
+async function login(login, password, session) {
   const conn = await pool.getConnection();
   const query = 'SELECT password, type FROM users WHERE login = ?';
   const result = await conn.query(query, [login]);
@@ -254,7 +254,6 @@ async function login(login, password, type, session) {
   let response = await bcrypt.compare(password, result[0].password);
 
   if (response) {
-    console.log(result[0].type);
     session.login = login;
     session.type = result[0].type;
   }

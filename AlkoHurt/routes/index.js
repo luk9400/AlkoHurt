@@ -16,7 +16,9 @@ router.get('/', function (req, res) {
 
 router.get('/add-supplier', function (req, res) {
   if (req.session.type === 'manager' || req.session.type === 'admin') {
-    res.render('add-supplier');
+    res.render('add-supplier', {
+      nick: req.session.login
+    });
   } else if (req.session.login) {
     res.render('index' + req.session.type, {
       nick: req.session.login,
@@ -47,7 +49,9 @@ router.post('/add_supplier', function (req, res) {
 
 router.get('/add-client', function (req, res) {
   if (req.session.login) {
-    res.render('add-client');
+    res.render('add-client', {
+      nick: req.session.login
+    });
   } else {
     res.redirect('/login');
   }
@@ -67,7 +71,9 @@ router.post('/add_client', function (req, res) {
 });
 
 router.get('/add-wine', function (req, res) {
-  res.render('add-wine');
+  res.render('add-wine', {
+    nick: req.session.login
+  });
 });
 
 router.post('/add_wine', async function (req, res) {
@@ -81,7 +87,9 @@ router.post('/add_wine', async function (req, res) {
 });
 
 router.get('/add-beer', function (req, res) {
-  res.render('add-beer');
+  res.render('add-beer', {
+    nick: req.session.login
+  });
 });
 
 router.post('/add_beer', async function (req, res) {
@@ -95,7 +103,9 @@ router.post('/add_beer', async function (req, res) {
 });
 
 router.get('/add-liquor', function (req, res) {
-  res.render('add-liquor');
+  res.render('add-liquor', {
+    nick: req.session.login
+  });
 });
 
 router.post('/add_liquor', async function (req, res) {
@@ -112,7 +122,7 @@ router.get('/plan-sale', async function (req, res) {
     .then(e => {
       res.render('plan-sale', {data: e});
     }).catch(e => {
-      console.log(e);
+    console.log(e);
   })
 });
 
@@ -132,7 +142,10 @@ router.get('/update-sale', async function (req, res) {
   controller.getSales()
     .then(e => {
       console.log(e);
-      res.render('update-sale', {data: e});
+      res.render('update-sale', {
+        data: e,
+        nick: req.session.login
+      });
     });
 });
 
@@ -146,7 +159,10 @@ router.get('/plan-supply', async function (req, res) {
   controller.getNames()
     .then(e => {
       // console.log(e);
-      res.render('plan-supply', {data: e});
+      res.render('plan-supply', {
+        data: e,
+        nick: req.session.login
+      });
     }).catch(e => {
     console.log(e);
     res.redirect('/');
@@ -170,12 +186,15 @@ router.get('/update-supply/', async function (req, res) {
   controller.getSupplies()
     .then(e => {
       console.log(e);
-      res.render('update-supply', {data: e});
+      res.render('update-supply', {
+        data: e,
+        nick: req.session.login
+      });
     });
 });
 
 router.post('/update_supply', async function (req, res) {
-  controller.updateSupply(req.body.supplySelect). then(() => {
+  controller.updateSupply(req.body.supplySelect).then(() => {
     res.redirect('/');
   });
 });
@@ -183,7 +202,10 @@ router.post('/update_supply', async function (req, res) {
 router.get('/show-quantity', async function (req, res) {
   controller.getProducts()
     .then(e => {
-      res.render('show-quantity', {data: e});
+      res.render('show-quantity', {
+        data: e,
+        nick: req.session.login
+      });
     })
 });
 
@@ -200,7 +222,7 @@ router.get('/login', function (req, res) {
 
 router.post('/login', async function (req, res) {
   try {
-    req.session = await controller.login(req.body.login, req.body.password, req.body.type, req.session);
+    req.session = await controller.login(req.body.login, req.body.password, req.session);
     res.redirect('/');
   } catch (e) {
     console.log(e);
@@ -209,7 +231,9 @@ router.post('/login', async function (req, res) {
 
 router.get('/add-user', function (req, res) {
   if (req.session.type === 'admin') {
-    res.render('add-user');
+    res.render('add-user', {
+      nick: req.session.login
+    });
   } else if (req.session.login) {
     res.render('indexAdmin', {
       nick: req.session.login,
