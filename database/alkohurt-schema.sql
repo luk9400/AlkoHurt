@@ -76,7 +76,7 @@ CREATE TABLE supplies_info (
   supply_id  int,
   quantity   int UNSIGNED,
   FOREIGN KEY (product_id) REFERENCES products (product_id),
-  FOREIGN KEY (supply_id) REFERENCES supplies (supply_id)
+  FOREIGN KEY (supply_id) REFERENCES supplies (supply_id) ON DELETE CASCADE
 );
 
 CREATE TABLE clients (
@@ -104,7 +104,7 @@ CREATE TABLE sales_info (
   sale_id    int,
   quantity   int UNSIGNED,
   FOREIGN KEY (product_id) REFERENCES products (product_id),
-  FOREIGN KEY (sale_id) REFERENCES sales (sale_id)
+  FOREIGN KEY (sale_id) REFERENCES sales (sale_id) ON DELETE CASCADE
 );
 
 DELIMITER //
@@ -275,7 +275,17 @@ INSERT INTO supplies (supply_date, done) VALUES (supply_date, supplier);
 END //
 
 DELIMITER //
-CREATE FUNCTION get_supplier_id(IN supplier VARCHAR(50)) RETURNS INT
-BEGIN
-  RETURN (SELECT);
-END //
+CREATE TRIGGER IF NOT EXISTS update_quantity AFTER UPDATE ON supplies FOR EACH ROW
+  BEGIN
+    IF NEW.done AND NOT OLD.done THEN
+      CREATE TEMPORARY TABLE prods AS (
+        SELECT product_id, quantity FROM supplies JOIN supplies_info si ON supplies.supply_id = si.supply_id
+        WHERE supplies.supply_id = NEW.supply_id
+      );
+      UPDATE products p JOIN prods ON  p.product_id = prods.product_id
+        SET p.quantity = p.quantity + prods.quantity;
+    END IF;
+  END //
+DELIMITER ;
+
+DELETE from products WHERE name='piast';
