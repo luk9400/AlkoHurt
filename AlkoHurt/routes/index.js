@@ -118,7 +118,7 @@ router.post('/add_liquor', async function (req, res) {
 });
 
 router.get('/plan-sale', async function (req, res) {
-  controller.getPlanSaleData()
+  controller.getPlanSaleData(req.session.type)
     .then(e => {
       res.render('plan-sale', {data: e});
     }).catch(e => {
