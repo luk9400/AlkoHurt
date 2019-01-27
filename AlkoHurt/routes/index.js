@@ -166,7 +166,7 @@ router.post('/plan_supply', async function (req, res) {
     });
 });
 
-router.get('/update-supply/', async function (req, res) {
+router.get('/update-supply', async function (req, res) {
   controller.getSupplies()
     .then(e => {
       console.log(e);

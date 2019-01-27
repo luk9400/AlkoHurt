@@ -20,8 +20,6 @@ const setSecondarySelect = () => {
 
   nameSelect.setAttribute('required', 'required');
   nameSelect.className = 'form-control';
-  nameSelect.marginLeft = '50px';
-  nameSelect.margin = '40px';
   nameSelect.id = 'nameSelect';
 
   while (selections.childElementCount > 1) {
@@ -55,7 +53,7 @@ const updateInfo = () =>  {
 
 const senRequest = () => {
   if (quantityData.date !== "" && quantityData.product_id != null) {
-    let quantity = document.getElementById('quantity')
+    let quantity = document.getElementById('quantity');
     let xhr = new XMLHttpRequest();
     xhr.open('POST', '/show_quantity', true);
     xhr.setRequestHeader('Content-Type', 'application/json');

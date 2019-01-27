@@ -268,13 +268,6 @@ CREATE PROCEDURE add_liquor(IN name VARCHAR(50), IN type ENUM('vodka', 'whiskey'
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE plan_supply(IN supply_date DATE, IN supplier VARCHAR(50))
-BEGIN
-
-INSERT INTO supplies (supply_date, done) VALUES (supply_date, supplier);
-END //
-
-DELIMITER //
 CREATE TRIGGER IF NOT EXISTS update_quantity_supplies AFTER UPDATE ON supplies FOR EACH ROW
   BEGIN
     IF NEW.done AND NOT OLD.done THEN
@@ -349,4 +342,16 @@ BEGIN
 END //
 DELIMITER ;
 
-DROP FUNCTION quantity_on_date;
+DELIMITER //
+CREATE PROCEDURE update_supply(IN in_supply_id INT)
+BEGIN
+  UPDATE supplies SET done = 1 WHERE supply_id = in_supply_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE update_sale(IN in_sale_id INT)
+BEGIN
+  UPDATE sales SET done = 1 WHERE sale_id = in_sale_id;
+END //
+DELIMITER ;

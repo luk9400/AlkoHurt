@@ -151,11 +151,11 @@ async function getPlanSaleData() {
   console.log(clients);
 
   for (type of types) {
+    const sql = `SELECT t.product_id, t.name, t.capacity, quantity FROM ${type} t JOIN products p on t.product_id = p.product_id`;
     try {
       productsData.push({
         name: type,
-        data: (await conn.query(`SELECT t.product_id, t.name, t.capacity, quantity FROM ${type} t` +
-          ` JOIN products p on t.product_id = p.product_id`))
+        data: (await conn.query(sql))
       });
     } catch (e) {
       console.log(e);
@@ -258,6 +258,7 @@ async function login(login, password, type, session) {
     session.login = login;
     session.type = result[0].type;
   }
+
   return session;
 }
 
@@ -296,7 +297,7 @@ async function getSupplies() {
 async function updateSupply(supply_id) {
   const conn = await pool.getConnection();
 
-  await conn.query('UPDATE supplies SET done = 1 WHERE supply_id = ?', [supply_id])
+  await conn.query('CALL update_supply(?)', [supply_id])
     .then(e => {
       console.log(e);
       console.log('Supply made done :)')
@@ -340,7 +341,7 @@ async function getSales() {
 async function updateSale(sale_id) {
   const conn = await pool.getConnection();
 
-  await conn.query('UPDATE sales SET done = 1 WHERE sale_id = ?', [sale_id])
+  await conn.query('CALL update_sale(?)', [sale_id])
     .then(e => {
       console.log(e);
       console.log('Sale made done :)')

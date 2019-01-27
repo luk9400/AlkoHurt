@@ -1,6 +1,5 @@
 window.addEventListener('load', () => {
   console.log(data);
-  // addNewProductField();
   fillClientsSelect();
 });
 
@@ -10,6 +9,7 @@ let saleData = {
   date: null,
   products: []
 };
+
 const fillClientsSelect = () => {
   let clientSelect = document.getElementById('clientSelect');
 

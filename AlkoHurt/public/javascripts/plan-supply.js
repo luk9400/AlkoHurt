@@ -1,6 +1,5 @@
 window.addEventListener('load', () => {
   console.log(data);
-  addNewProductField();
   fillSuppliersSelect();
 });
 
@@ -89,7 +88,6 @@ const setSecondarySelect = (container) => {
       }
     }
   }
-
 
   while (container.childElementCount > 1) {
     container.removeChild(container.lastChild);
