@@ -128,6 +128,20 @@ router.post('/plan_sale', async function (req, res) {
     });
 });
 
+router.get('/update-sale', async function (req, res) {
+  controller.getSales()
+    .then(e => {
+      console.log(e);
+      res.render('update-sale', {data: e});
+    });
+});
+
+router.post('/update_sale', async function (req, res) {
+  controller.updateSale(req.body.saleSelect).then(() => {
+    res.redirect('/');
+  });
+});
+
 router.get('/plan-supply', async function (req, res) {
   controller.getNames()
     .then(e => {
@@ -161,8 +175,9 @@ router.get('/update-supply/', async function (req, res) {
 });
 
 router.post('/update_supply', async function (req, res) {
-  controller.updateSupply(req.body.supplySelect);
-  res.redirect('/');
+  controller.updateSupply(req.body.supplySelect). then(() => {
+    res.redirect('/');
+  });
 });
 
 router.get('/login', function (req, res) {

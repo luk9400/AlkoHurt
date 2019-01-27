@@ -275,7 +275,7 @@ INSERT INTO supplies (supply_date, done) VALUES (supply_date, supplier);
 END //
 
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS update_quantity AFTER UPDATE ON supplies FOR EACH ROW
+CREATE TRIGGER IF NOT EXISTS update_quantity_supplies AFTER UPDATE ON supplies FOR EACH ROW
   BEGIN
     IF NEW.done AND NOT OLD.done THEN
       CREATE TEMPORARY TABLE prods AS (
@@ -289,7 +289,7 @@ CREATE TRIGGER IF NOT EXISTS update_quantity AFTER UPDATE ON supplies FOR EACH R
 DELIMITER ;
 
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS delete_prodcuts AFTER DELETE ON products FOR EACH ROW
+CREATE TRIGGER IF NOT EXISTS delete_products AFTER DELETE ON products FOR EACH ROW
   BEGIN
     DELETE FROM beers WHERE beers.product_id = OLD.product_id;
     DELETE FROM liquors WHERE liquors.product_id = OLD.product_id;
@@ -298,7 +298,7 @@ CREATE TRIGGER IF NOT EXISTS delete_prodcuts AFTER DELETE ON products FOR EACH R
 DELIMITER ;
 
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS update_quantity AFTER UPDATE ON sales FOR EACH ROW
+CREATE TRIGGER IF NOT EXISTS update_quantity_sales AFTER UPDATE ON sales FOR EACH ROW
   BEGIN
     IF NEW.done AND NOT OLD.done THEN
       CREATE TEMPORARY TABLE prods AS (

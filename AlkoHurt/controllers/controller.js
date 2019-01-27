@@ -305,7 +305,52 @@ async function updateSupply(supply_id) {
   conn.end();
 }
 
+async function getSales() {
+  const conn = await pool.getConnection();
+
+  let sales = [];
+
+  let sales_ids = (await conn.query('SELECT sale_id FROM sales WHERE done = 0')).map(e => e.sale_id);
+
+  console.log(sales_ids);
+
+  for (let sale_id of sales_ids) {
+    try {
+      sales.push({
+        sale_id: sale_id,
+        date: (await conn.query('SELECT sale_date FROM sales WHERE sale_id = ?', [sale_id]))[0].sale_date,
+        client: (await conn.query(
+          'SELECT name FROM sales JOIN clients ON sales.client_id = clients.client_id WHERE sale_id = ?',
+          [sale_id]
+        ))[0].name,
+        products: (await conn.query('SELECT name, capacity, s.quantity' +
+          ' FROM sales_info s JOIN products p on s.product_id = p.product_id ' +
+          ' WHERE sale_id = ?', [sale_id]))
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  conn.end();
+
+  return sales;
+}
+
+async function updateSale(sale_id) {
+  const conn = await pool.getConnection();
+
+  await conn.query('UPDATE sales SET done = 1 WHERE sale_id = ?', [sale_id])
+    .then(e => {
+      console.log(e);
+      console.log('Sale made done :)')
+    });
+
+  conn.end();
+}
+
 module.exports = {
   addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login,
-  getNames, planSupply, getSupplies, updateSupply, getPlanSaleData, planSale
+  getNames, planSupply, getSupplies, updateSupply, getPlanSaleData, planSale,
+  getSales, updateSale
 };

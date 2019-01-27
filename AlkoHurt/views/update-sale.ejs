@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf8">
+    <title>Update sale</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/javascripts/update-sale.js"></script>
+    <script>
+      let data = <%- JSON.stringify(data)%>;
+    </script>
+</head>
+<%include navbar%>
+<body>
+<div class="container form" >
+    <h1>Update sale</h1>
+    <form action="/update_sale" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-form-label" for="saleSelect">Sale</label>
+                <select type="text" class="form-control" id="saleSelect" required="required" name="saleSelect">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Info</div>
+                    <div class="card-body" id="saleInfo">
+                    </div>
+                </div>
+
+            </div>
+            <div class="buttons">
+                <button onclick="location.href='/'" type="button" class="btn btn-primary btn-lg ">Back</button>
+                <button type="submit" class="btn btn-primary btn-lg ">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+    <footer>
+        <%include footer.ejs%>
+    </footer>
+</div>
+</body>
