@@ -32,3 +32,5 @@ hs_err_pid*
 **/node_modules/
 *.xml
 *.iml
+
+**/backups/

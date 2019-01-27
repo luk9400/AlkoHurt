@@ -381,11 +381,11 @@ async function quantityOnDate(type, product_id, date) {
 
 function createBackup() {
   const date = new Date();
-  exec('mysqldump -u admin -p adminpassword alkohurt', (error, stdout, stderr) => {
+  exec('mysqldump -u admin -padminpassword alkohurt', (error, stdout, stderr) => {
     if (error) {
       throw error;
     }
-    fs.writeFile(`${date.getTime()}`, stdout, (err) => {
+    fs.writeFile(`${date.getTime()}.sql`, stdout, (err) => {
       if (err) {
         throw err;
       }
