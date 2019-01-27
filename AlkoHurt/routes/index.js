@@ -180,6 +180,20 @@ router.post('/update_supply', async function (req, res) {
   });
 });
 
+router.get('/show-quantity', async function (req, res) {
+  controller.getProducts()
+    .then(e => {
+      res.render('show-quantity', {data: e});
+    })
+});
+
+router.post('/show_quantity', async function (req, res) {
+  controller.quantityOnDate(req.body.product_id, req.body.date)
+    .then(e => {
+      res.json({quantity: e});
+    });
+});
+
 router.get('/login', function (req, res) {
   res.render('login');
 });

@@ -60,3 +60,8 @@ body {
 #navbar {
     margin-bottom: 30px;
 }
+
+#quantity {
+    display: flex;
+    justify-content: center;
+}

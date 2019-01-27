@@ -349,8 +349,46 @@ async function updateSale(sale_id) {
   conn.end();
 }
 
+async function getProducts() {
+  const conn = await pool.getConnection();
+  const types = ['beers', 'wines', 'liquors'];
+  let productsData = [];
+
+  for (type of types) {
+    try {
+      productsData.push({
+        name: type,
+        data: (await conn.query(`SELECT product_id, name, capacity FROM ${type}`))
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  console.log(productsData);
+  conn.end();
+
+  return {
+    productsData
+  };
+}
+
+async function quantityOnDate(product_id, date) {
+  const conn = await pool.getConnection();
+  let quantity = null;
+
+  await conn.query('SELECT quantity_on_date(?, ?) as quantity', [product_id, date])
+    .then(e => {
+      quantity = e[0].quantity;
+    }).catch(e => {
+      console.log(e);
+    });
+
+  conn.end();
+  return quantity;
+}
+
 module.exports = {
   addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login,
   getNames, planSupply, getSupplies, updateSupply, getPlanSaleData, planSale,
-  getSales, updateSale
+  getSales, updateSale, getProducts, quantityOnDate
 };
