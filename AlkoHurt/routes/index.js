@@ -355,7 +355,9 @@ router.get('/backup', async function (req, res) {
 
 router.get('/custom-query', async function (req, res) {
   if (req.session.login) {
-    //
+    res.render('custom-query', {
+      nick: req.session.login
+    })
   } else {
     res.redirect('/login');
   }
