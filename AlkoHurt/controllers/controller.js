@@ -385,7 +385,7 @@ function createBackup() {
     if (error) {
       throw error;
     }
-    fs.writeFile(`${date.getTime()}.sql`, stdout, (err) => {
+    fs.writeFile(`./backups/${date.getTime()}.sql`, stdout, (err) => {
       if (err) {
         throw err;
       }
