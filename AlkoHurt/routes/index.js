@@ -355,9 +355,14 @@ router.get('/backup', async function (req, res) {
 
 router.get('/restore', function (req, res) {
   if (req.session.type === 'admin') {
-    res.render('restore', {
-      nick: req.session.login
-    });
+    controller.getBackups()
+      .then(e => {
+        console.log(e);
+        res.render('restore', {
+          data: e,
+          nick: req.session.login
+        });
+      });
   } else if (req.session.login) {
     res.redirect('/');
   } else {
