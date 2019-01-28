@@ -1,6 +1,6 @@
 const mariadb = require('mariadb');
 const bcrypt = require('bcryptjs');
-const { exec } = require('child_process');
+const {exec} = require('child_process');
 const fs = require('fs');
 
 const poolApp = mariadb.createPool({
@@ -13,7 +13,7 @@ const poolApp = mariadb.createPool({
   connectionLimit: 5
 });
 
-const poolAdmin =  mariadb.createPool({
+const poolAdmin = mariadb.createPool({
   host: 'localhost',
   port: '3306',
   user: 'admin',
@@ -23,7 +23,7 @@ const poolAdmin =  mariadb.createPool({
   connectionLimit: 5
 });
 
-const poolManager =  mariadb.createPool({
+const poolManager = mariadb.createPool({
   host: 'localhost',
   port: '3306',
   user: 'manager',
@@ -33,7 +33,7 @@ const poolManager =  mariadb.createPool({
   connectionLimit: 5
 });
 
-const poolWorker =  mariadb.createPool({
+const poolWorker = mariadb.createPool({
   host: 'localhost',
   port: '3306',
   user: 'worker',
@@ -44,10 +44,10 @@ const poolWorker =  mariadb.createPool({
 });
 
 const pool = {
-    app: poolApp,
-    admin: poolAdmin,
-    manager: poolManager,
-    worker: poolWorker
+  app: poolApp,
+  admin: poolAdmin,
+  manager: poolManager,
+  worker: poolWorker
 };
 
 async function addSupplier(type, name, nip, street, postal, city, phone, email) {
@@ -387,19 +387,35 @@ function createBackup() {
   const date = new Date();
   exec('mysqldump -u admin -padminpassword alkohurt', (error, stdout, stderr) => {
     if (error) {
-      throw error;
+      console.log(error);
     }
-    fs.writeFile(`./backups/${date.getTime()}.sql`, stdout, (err) => {
+    fs.writeFile(`./backups/${date.toISOString()}.sql`, stdout, (err) => {
       if (err) {
-        throw err;
+        console.log(err);
       }
     });
   });
   console.log('Done');
 }
 
+function getBackups() {
+  const date = new Date();
+  console.log(date.toUTCString());
+  const result = fs.readdirSync('./backups') || [];
+  console.log(result);
+  return result;
+}
+
+function restore(backupName) {
+  exec(`mysql -u admin -padminpassword < ./backups/${backupName}`, (err, stdout, stderr) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+}
+
 module.exports = {
   addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login,
   getNames, planSupply, getSupplies, updateSupply, getPlanSaleData, planSale,
-  getSales, updateSale, getProducts, quantityOnDate, createBackup
+  getSales, updateSale, getProducts, quantityOnDate, createBackup, getBackups, restore
 };
