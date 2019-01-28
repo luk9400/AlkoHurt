@@ -353,6 +353,14 @@ router.get('/backup', async function (req, res) {
   res.redirect('/');
 });
 
+router.get('/custom-query', async function (req, res) {
+  if (req.session.login) {
+    //
+  } else {
+    res.redirect('/login');
+  }
+});
+
 router.get('/restore', function (req, res) {
   if (req.session.type === 'admin') {
     controller.getBackups()
