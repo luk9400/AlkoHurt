@@ -350,4 +350,12 @@ router.get('/backup', async function (req, res) {
   res.redirect('/');
 });
 
+router.get('/custom-query', async function (req, res) {
+  if (req.session.login) {
+    
+  } else {
+    res.redirect('/login');
+  }
+});
+
 module.exports = router;

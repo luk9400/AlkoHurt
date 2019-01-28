@@ -59,7 +59,7 @@ async function addSupplier(type, name, nip, street, postal, city, phone, email) 
 }
 
 async function addClient(type, name, nip, street, postal, city, phone, email) {
-  const conn = await pool[userType].getConnection();
+  const conn = await pool[type].getConnection();
   const query = 'INSERT INTO clients (name, nip, street_and_number, postal_code, city, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)';
   await conn.query(query, [name, nip, street, postal, city, phone, email]);
   conn.end();
