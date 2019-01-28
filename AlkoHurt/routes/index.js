@@ -365,7 +365,6 @@ router.get('/restore', function (req, res) {
   if (req.session.type === 'admin') {
     controller.getBackups()
       .then(e => {
-        console.log(e);
         res.render('restore', {
           data: e,
           nick: req.session.login
@@ -380,7 +379,9 @@ router.get('/restore', function (req, res) {
 
 router.post('/restore', function (req, res) {
   if (req.session.type === 'admin') {
-
+    console.log(req.body.restoreVersion);
+    controller.restore(req.body.restoreVersion);
+    res.redirect('/');
   } else if (req.session.login) {
     res.redirect('/');
   } else {

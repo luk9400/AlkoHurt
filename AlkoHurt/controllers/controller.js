@@ -389,7 +389,7 @@ function createBackup() {
     if (error) {
       console.log(error);
     }
-    fs.writeFile(`./backups/d${date.getTime()}.sql`, stdout, (err) => {
+    fs.writeFile(`./backups/${date.getTime()}.sql`, stdout, (err) => {
       if (err) {
         console.log(err);
       }
@@ -399,15 +399,11 @@ function createBackup() {
 }
 
 async function getBackups() {
-  const date = new Date();
-  console.log(date.toUTCString());
-  const result = await fs.readdirSync('./backups') || [];
-  console.log(result);
-  return result;
+  return await fs.readdirSync('./backups') || [];
 }
 
 function restore(backupName) {
-  exec(`mysql -u admin -padminpassword < ./backups/${backupName}`, (err, stdout, stderr) => {
+  exec(`mysql -u admin -padminpassword alkohurt < ./backups/${backupName}`, (err, stdout, stderr) => {
     if (err) {
       console.log(err);
     }
