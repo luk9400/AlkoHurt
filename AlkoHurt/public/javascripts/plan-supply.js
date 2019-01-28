@@ -12,7 +12,7 @@ let supplyData = {
 
 const addNewProductField = () => {
   let selections = document.getElementById('selections');
-  let labeledContainter = document.createElement('div');
+  let labeledContainer = document.createElement('div');
   let container = document.createElement('div');
   let select = document.createElement('select');
   let types = ['Beers', 'Wines', 'Liquors'];
@@ -22,9 +22,9 @@ const addNewProductField = () => {
   label.className = 'col-form-label';
   label.for = 'div';
   label.appendChild(document.createTextNode('Product ' + (product_index + 1).toString()));
-  labeledContainter.appendChild(label);
+  labeledContainer.appendChild(label);
   // select.placeholder = 'Product type'
-  labeledContainter.className = 'form-group';
+  labeledContainer.className = 'form-group';
   defaultOption.disabled = true;
   defaultOption.selected = true;
   defaultOption.appendChild(document.createTextNode('Product type'));
@@ -40,18 +40,18 @@ const addNewProductField = () => {
 
   container.classList.add('product');
   container.classList.add('form-group');
-  container.setAttribute('id', product_index.toString());
-  select.setAttribute('action', '/get_names');
+  container.id = product_index.toString();
+  select.action = '/get_names';
   select.className = 'form-control';
-  select.setAttribute('required', 'required');
+  select.required = true;
 
   select.addEventListener('change', () => {
     setSecondarySelect(container);
     updateProductsData(container);
   });
 
-  labeledContainter.appendChild(container);
-  selections.appendChild(labeledContainter);
+  labeledContainer.appendChild(container);
+  selections.appendChild(labeledContainer);
 
   product_index++;
 };
@@ -63,10 +63,10 @@ const setSecondarySelect = (container) => {
   quantityInput.className = 'form-control';
   quantityInput.type = 'number';
   quantityInput.placeholder = 'Quantity';
-  quantityInput.setAttribute('required', 'required');
+  quantityInput.required = true;
   quantityInput.step = '1';
   quantityInput.min = '1';
-  nameSelect.setAttribute('required', 'required');
+  nameSelect.required = true;
   nameSelect.className = 'form-control';
   nameSelect.style.marginRight = '10px';
   nameSelect.style.marginLeft = '10px';

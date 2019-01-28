@@ -18,7 +18,7 @@ const setSecondarySelect = () => {
   let typeSelect = document.getElementById('typeSelect');
   let nameSelect = document.createElement('select');
 
-  nameSelect.setAttribute('required', 'required');
+  nameSelect.required = true;
   nameSelect.className = 'form-control';
   nameSelect.id = 'nameSelect';
 
@@ -48,7 +48,6 @@ const updateInfo = () =>  {
   } catch (e) {
     console.log(e);
   }
-  console.log(quantityData);
 };
 
 const senRequest = () => {
@@ -59,7 +58,6 @@ const senRequest = () => {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function () {
       let result = JSON.parse(xhr.responseText);
-      console.log(result);
       if (xhr.readyState === 4 && xhr.status === 200) {
         quantity.removeChild(quantity.lastChild);
         quantity.appendChild(document.createTextNode(result.quantity));

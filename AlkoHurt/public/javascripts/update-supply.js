@@ -1,14 +1,15 @@
 window.addEventListener('load', () => {
   console.log(data);
   fillSupplySelect();
-  fillSupplyInfo();
+  // fillSupplyInfo();
+  fillSupplyTable();
 });
 
 const fillSupplySelect = () => {
   let select = document.getElementById('supplySelect');
-  select.addEventListener('change', fillSupplyInfo);
+  // select.addEventListener('change', fillSupplyInfo);
+  select.addEventListener('change', fillSupplyTable);
   for (let supply of data) {
-    // console.log(supply);
     let option = document.createElement('option');
     option.value = supply.supply_id;
     option.appendChild(document.createTextNode(supply.supply_id + ' '
@@ -17,7 +18,7 @@ const fillSupplySelect = () => {
   }
 };
 
-const fillSupplyInfo = () => {
+const fillSupplyTable = () => {
   const supplyInfoDiv = document.getElementById('supplyInfo');
   const supplySelect = document.getElementById('supplySelect');
 
@@ -26,16 +27,41 @@ const fillSupplyInfo = () => {
   }
 
   for (let supply of data) {
-    console.log(supplySelect.value + ' ? ' + supply.supply_id);
     if (supply.supply_id.toString() === supplySelect.value.toString()) {
-      let h = document.createElement('h4');
-      h.appendChild(document.createTextNode(supply.supplier + ' | ' + supply.date));
-      supplyInfoDiv.appendChild(h);
-
-      let pre = document.createElement('pre');
-      pre.appendChild(document.createTextNode(JSON.stringify(supply.products, null, 2)));
-      supplyInfoDiv.appendChild(pre);
+      let table = objArrayToTable(supply.products);
+      supplyInfoDiv.appendChild(table);
+      break;
     }
   }
-
 };
+
+// We assume that every object has the same keys
+function objArrayToTable(objArray) {
+  let table = document.createElement('table');
+  table.className = 'table table-active';
+  table.style.marginBottom = '0px';
+  let thead = document.createElement('thead');
+  let headersRow = document.createElement('tr');
+
+  for (let key of Object.keys(objArray[0])) {
+    let header = document.createElement('th');
+    let headerText = key.toString();
+    header.appendChild(document.createTextNode(headerText));
+    headersRow.appendChild(header);
+  }
+  thead.appendChild(headersRow);
+  table.appendChild(thead);
+
+  for (let obj of objArray) {
+    let row = document.createElement('tr');
+    for (let key of Object.keys(obj)) {
+      let data = document.createElement('td');
+      let dataText = obj[key];
+      data.appendChild(document.createTextNode(dataText));
+      row.appendChild(data);
+    }
+    table.appendChild(row);
+  }
+
+  return table;
+}

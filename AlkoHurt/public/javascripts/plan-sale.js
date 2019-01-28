@@ -34,7 +34,6 @@ const addNewProductField = () => {
   label.for = 'div';
   label.appendChild(document.createTextNode('Product ' + (product_index + 1).toString()));
   labeledContainer.appendChild(label);
-  // select.placeholder = 'Product type'
   labeledContainer.className = 'form-group';
   defaultOption.disabled = true;
   defaultOption.selected = true;
@@ -51,10 +50,10 @@ const addNewProductField = () => {
 
   container.classList.add('product');
   container.classList.add('form-group');
-  container.setAttribute('id', product_index.toString());
-  select.setAttribute('action', '/get_names');
+  container.id = product_index.toString();
+  select.action = '/get_names';
   select.className = 'form-control';
-  select.setAttribute('required', 'required');
+  select.required = true;
 
   select.addEventListener('change', () => {
     setSecondarySelect(container);
@@ -74,11 +73,11 @@ const setSecondarySelect = (container) => {
   quantitySelect.className = 'form-control';
   quantitySelect.type = 'number';
   quantitySelect.placeholder = 'Quantity';
-  quantitySelect.setAttribute('required', 'required');
+  quantitySelect.required = true;
   quantitySelect.step = '1';
   quantitySelect.min = '1';
 
-  nameSelect.setAttribute('required', 'required');
+  nameSelect.required = true;
   nameSelect.className = 'form-control';
   nameSelect.style.marginRight = '10px';
   nameSelect.style.marginLeft = '10px';
@@ -143,6 +142,7 @@ function updateProductsData(container) {
       product_id: JSON.parse(container.children[1].value).product_id,
       quantity: container.children[2].value
     };
+    console.log('Products data of sale data updated.');
   } catch (e) {
     if (e instanceof TypeError) {
       console.log('no children mate');
@@ -150,18 +150,18 @@ function updateProductsData(container) {
       console.log(e);
     }
   }
-  console.log(saleData);
 }
 
 function updateClientAndDate() {
   saleData.client = document.getElementById('clientSelect').value;
   saleData.date = document.getElementById('dateInput').value;
+  console.log('Client and date updated');
 }
 
 const sendRequest = () => {
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/plan_sale', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
-  console.log(JSON.stringify(saleData));
   xhr.send(JSON.stringify(saleData));
+  console.log('XMLHttpRequest has been send');
 };
