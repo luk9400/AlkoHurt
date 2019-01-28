@@ -2,9 +2,13 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add user</title>
+    <title>Restore database</title>
     <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
     <link rel="stylesheet" href="/stylesheets/style.css"/>
+    <script src="/javascripts/restore.js"></script>
+    <script>
+        let files = <%- JSON.stringify(data)%>;
+    </script>
 </head>
 <body>
 <% include navbar %>
@@ -13,12 +17,8 @@
     <form action="/restore" method="post">
         <fieldset>
             <div class="form-group">
-                <label class="col-form-label" for="userTypeSelect">Type</label>
-                <select class="form-control" id="userTypeSelect" name="type">
-                    <option>Admin</option>
-                    <option>Manager</option>
-                    <option>Worker</option>
-                </select>
+                <label class="col-form-label" for="restoreSelect">Specify restore version</label>
+                <select class="form-control" id="restoreSelect" name="restoreVersion"></select>
             </div>
             <div class="buttons">
                 <button onclick="location.href='/'" type="button" class="btn btn-primary btn-lg ">Back</button>
