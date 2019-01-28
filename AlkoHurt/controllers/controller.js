@@ -9,6 +9,7 @@ const poolApp = mariadb.createPool({
   user: 'app',
   password: 'apppassword',
   database: 'alkohurt',
+  dateStrings: true,
   connectionLimit: 5
 });
 
@@ -18,6 +19,7 @@ const poolAdmin =  mariadb.createPool({
   user: 'admin',
   password: 'adminpassword',
   database: 'alkohurt',
+  dateStrings: true,
   connectionLimit: 5
 });
 
@@ -27,6 +29,7 @@ const poolManager =  mariadb.createPool({
   user: 'manager',
   password: 'managerpassword',
   database: 'alkohurt',
+  dateStrings: true,
   connectionLimit: 5
 });
 
@@ -36,6 +39,7 @@ const poolWorker =  mariadb.createPool({
   user: 'worker',
   password: 'workerpassword',
   database: 'alkohurt',
+  dateStrings: true,
   connectionLimit: 5
 });
 
