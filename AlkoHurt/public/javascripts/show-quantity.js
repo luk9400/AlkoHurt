@@ -18,6 +18,8 @@ const setSecondarySelect = () => {
   let typeSelect = document.getElementById('typeSelect');
   let nameSelect = document.createElement('select');
 
+  typeSelect.style.marginRight = '10px';
+  nameSelect.style.marginLeft = '10px';
   nameSelect.required = true;
   nameSelect.className = 'form-control';
   nameSelect.id = 'nameSelect';
