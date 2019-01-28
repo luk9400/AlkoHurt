@@ -157,7 +157,10 @@ router.get('/plan-sale', async function (req, res) {
   if (req.session.login) {
     controller.getPlanSaleData(req.session.type)
       .then(e => {
-        res.render('plan-sale', {data: e});
+        res.render('plan-sale', {
+          data: e,
+          nick: req.session.login
+        });
       }).catch(e => {
       console.log(e);
     })
@@ -348,6 +351,28 @@ router.get('/backup', async function (req, res) {
     await controller.createBackup();
   }
   res.redirect('/');
+});
+
+router.get('/restore', function (req, res) {
+  if (req.session.type === 'admin') {
+    res.render('restore', {
+      nick: req.session.login
+    });
+  } else if (req.session.login) {
+    res.redirect('/');
+  } else {
+    res.redirect('/login');
+  }
+});
+
+router.post('/restore', function (req, res) {
+  if (req.session.type === 'admin') {
+
+  } else if (req.session.login) {
+    res.redirect('/');
+  } else {
+    res.redirect('/login');
+  }
 });
 
 module.exports = router;
