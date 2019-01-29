@@ -59,6 +59,10 @@ body {
   justify-content: space-evenly;
 }
 
+#nav-title {
+  margin: 0;
+}
+
 #navbar-container {
   display: flex;
   justify-content: space-between;
