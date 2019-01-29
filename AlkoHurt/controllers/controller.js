@@ -414,8 +414,43 @@ function restore(backupName) {
   });
 }
 
+async function getSchema(type) {
+  const conn = await pool[type].getConnection();
+  let result = null;
+  await conn.query('SELECT table_name, column_name FROM `INFORMATION_SCHEMA`.`columns` WHERE table_schema = "alkohurt" AND table_name <> "users"')
+    .then(schema => {
+      result = schema;
+    }).catch(err => {
+      result = err;
+    });
+  conn.end();
+  return result;
+}
+
+async function customQuery(queryData, type) {
+  const conn = await pool[type].getConnection();
+  console.log(queryData);
+  let query = 'SELECT ';
+  query += queryData.columns.join(', ');
+  query += ' FROM ' + queryData.table;
+
+  let result = {};
+
+  await conn.query(query, [])
+    .then(e => {
+      result = e;
+    }).catch( err => {
+      console.log(err);
+      result = null;
+    });
+
+  console.log(JSON.stringify(result));
+  conn.end();
+  return result;
+}
+
 module.exports = {
-  addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login,
-  getNames, planSupply, getSupplies, updateSupply, getPlanSaleData, planSale,
+  addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login, getSchema,
+  getNames, planSupply, getSupplies, updateSupply, getPlanSaleData, planSale, customQuery,
   getSales, updateSale, getProducts, quantityOnDate, createBackup, getBackups, restore
 };

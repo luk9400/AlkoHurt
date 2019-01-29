@@ -6,7 +6,7 @@ window.addEventListener('load', function () {
 function fillRestoreSelect() {
   let restoreSelect = document.getElementById('restoreSelect');
 
-  for (let i = 0; i < data.length(); i++) {
+  for (let i = 0; i < data.length; i++) {
     let option = document.createElement('option');
     option.value = i;
     option.appendChild(document.createTextNode(data[i]));
