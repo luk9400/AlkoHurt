@@ -42,6 +42,8 @@ GRANT EXECUTE ON PROCEDURE alkohurt.add_wine TO manager;
 GRANT INSERT ON alkohurt.users TO admin;
 GRANT DELETE ON alkohurt.users TO admin;
 
+--those are needed for backup & restore functionallity
 GRANT SELECT, LOCK TABLES ON alkohurt.* TO 'admin'@'localhost';
+GRANT DROP, CREATE, ALTER ON alkohurt.* TO 'admin'@'localhost';
 
 GRANT SELECT on alkohurt.users TO 'app'@'localhost';

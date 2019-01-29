@@ -59,8 +59,8 @@ body {
   justify-content: space-evenly;
 }
 
-#navbar * {
-  padding: 0;
+#nav-title {
+  margin: 0;
 }
 
 #navbar-container {
