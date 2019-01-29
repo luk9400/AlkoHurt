@@ -7,7 +7,6 @@ function fillRestoreSelect() {
 
   for (let i = 0; i < files.length; i++) {
     let option = document.createElement('option');
-    //option.value = i;
     option.appendChild(document.createTextNode(files[i]));
     restoreSelect.appendChild(option);
   }

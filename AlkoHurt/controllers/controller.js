@@ -410,8 +410,24 @@ function restore(backupName) {
   });
 }
 
+async function getUsers() {
+  const conn = await pool['admin'].getConnection();
+  const query = 'SELECT login FROM users';
+  const result = await conn.query(query, []);
+  conn.end();
+  console.log(result);
+  return result;
+}
+
+async function deleteUser(user) {
+  const conn = await pool['admin'].getConnection();
+  const query = 'DELETE FROM users WHERE login = ?';
+  await conn.query(query, [user]);
+  conn.end();
+}
+
 module.exports = {
   addSupplier, addClient, addWine, addBeer, addLiquor, addUser, login,
   getNames, planSupply, getSupplies, updateSupply, getPlanSaleData, planSale,
-  getSales, updateSale, getProducts, quantityOnDate, createBackup, getBackups, restore
+  getSales, updateSale, getProducts, quantityOnDate, createBackup, getBackups, restore, getUsers, deleteUser
 };

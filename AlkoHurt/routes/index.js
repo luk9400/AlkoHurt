@@ -391,4 +391,44 @@ router.post('/restore', function (req, res) {
   }
 });
 
+router.get('/delete-user', async function (req, res) {
+  if (req.session.type === 'admin') {
+    try {
+      controller.getUsers()
+        .then(e => {
+          res.render('delete-user', {
+            data: e,
+            nick: req.session.login
+          });
+        })
+      .catch(e => {
+        console.log(e);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  } else if (req.session.login) {
+    res.render('/', {
+      nick: req.session.login
+    });
+  } else {
+    res.redirect('/login');
+  }
+});
+
+router.post('/delete_user', async function (req, res) {
+  if (req.session.type === 'admin') {
+    try {
+      controller.deleteUser(req.body.user);
+    } catch (e) {
+      console.log(e);
+    }
+    res.redirect('/');
+  } else if (req.session.login) {
+    res.redirect('/');
+  } else {
+    res.redirect('/login');
+  }
+});
+
 module.exports = router;
