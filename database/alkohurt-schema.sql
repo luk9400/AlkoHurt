@@ -160,14 +160,18 @@ CREATE PROCEDURE inner_add_beer(IN id INT, IN name_in VARCHAR(50), IN brewery_in
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE add_beer(IN name VARCHAR(50), IN brewery VARCHAR(50), IN abv FLOAT UNSIGNED, IN type VARCHAR(50),
+CREATE OR REPLACE PROCEDURE add_beer(IN name VARCHAR(50), IN brewery VARCHAR(50), IN abv FLOAT UNSIGNED, IN type VARCHAR(50),
   IN capacity INT UNSIGNED, IN container_type ENUM('bottle', 'can', 'returnable'), IN price DECIMAL(5, 2) UNSIGNED)
   BEGIN
     IF beer_already_exists(name, brewery, abv, type, capacity, container_type) THEN
       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Beer already exists';
     ELSE
+      SET AUTOCOMMIT = 0;
+      START TRANSACTION;
       CALL add_product(name, 'beer', capacity, abv, price, 0, @id);
       CALL inner_add_beer(@id, name, brewery, abv, type, capacity, container_type);
+      COMMIT;
+      SET AUTOCOMMIT = 1;
     END IF;
   END //
 DELIMITER ;
@@ -210,15 +214,19 @@ CREATE PROCEDURE inner_add_wine(IN id INT, IN name_in VARCHAR(50), IN color_in E
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE add_wine(IN name VARCHAR(50), IN color ENUM('white', 'red', 'rose'), IN abv FLOAT UNSIGNED,
+CREATE OR REPLACE PROCEDURE add_wine(IN name VARCHAR(50), IN color ENUM('white', 'red', 'rose'), IN abv FLOAT UNSIGNED,
   IN type ENUM('brut nature', 'extra brut', 'brut', 'extra dry', 'dry', 'medium dry', 'medium sweet', 'sweet'),
   IN capacity INT UNSIGNED, IN country_of_origin VARCHAR(30), IN price DECIMAL(5, 2) UNSIGNED)
   BEGIN
     IF wine_already_exists(name, color, abv, type, capacity, country_of_origin) THEN
       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Wine already exists';
     ELSE
+      SET AUTOCOMMIT = 0;
+      START TRANSACTION;
       CALL add_product(name, 'wine',capacity, abv, price, 0, @id);
       CALL inner_add_wine(@id, name, color, abv, type, capacity, country_of_origin);
+      COMMIT;
+      SET AUTOCOMMIT = 1;
     END IF;
   END //
 DELIMITER ;
@@ -255,14 +263,18 @@ CREATE PROCEDURE inner_add_liquor(IN id INT, IN name_in VARCHAR(50), IN type_in 
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE add_liquor(IN name VARCHAR(50), IN type ENUM('vodka', 'whiskey', 'gin'), IN abv FLOAT UNSIGNED,
+CREATE OR REPLACE PROCEDURE add_liquor(IN name VARCHAR(50), IN type ENUM('vodka', 'whiskey', 'gin'), IN abv FLOAT UNSIGNED,
   IN capacity INT UNSIGNED, IN price DECIMAL(5, 2) UNSIGNED)
   BEGIN
     IF liquor_already_exists(name, type, abv, capacity) THEN
       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Liquor already exists';
     ELSE
+      SET AUTOCOMMIT = 0;
+      START TRANSACTION ;
       CALL add_product(name, 'liquor', capacity, abv, price, 0, @id);
       CALL inner_add_liquor(@id, name, type, abv, capacity);
+      COMMIT;
+      SET AUTOCOMMIT = 1;
     END IF;
   END //
 DELIMITER ;
