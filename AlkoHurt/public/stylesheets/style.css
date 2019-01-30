@@ -87,3 +87,9 @@ html {
 #col2 {
   text-align: right;
 }
+
+.footer-container {
+  min-width: 72%;
+  display: flex;
+  justify-content: space-between;
+}
