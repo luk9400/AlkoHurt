@@ -321,7 +321,7 @@ CREATE TRIGGER update_quantity_sales AFTER UPDATE ON sales FOR EACH ROW
 DELIMITER ;
 
 DELIMITER //
-CREATE FUNCTION quantity_on_date(in_product_id INT, in_date DATE) RETURNS INT
+CREATE OR REPLACE FUNCTION quantity_on_date(in_product_id INT, in_date DATE) RETURNS INT
 BEGIN
   DECLARE supplied INT;
   DECLARE sold INT;
@@ -334,7 +334,7 @@ BEGIN
   FROM supplies_info si JOIN supplies s ON si.supply_id = s.supply_id
   WHERE si.product_id = in_product_id AND
         (supply_date BETWEEN NOW() AND in_date AND
-        NOT done) OR NOT done
+        NOT done) OR (si.product_id = in_product_id AND NOT done)
   INTO supplied;
 
   SELECT SUM(quantity)
