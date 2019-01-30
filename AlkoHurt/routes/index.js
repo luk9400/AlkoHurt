@@ -355,9 +355,26 @@ router.get('/backup', async function (req, res) {
 
 router.get('/custom-query', async function (req, res) {
   if (req.session.login) {
-    res.render('custom-query', {
-      nick: req.session.login
-    })
+    await controller.getSchema(req.session.type)
+      .then(e => {
+        console.log(JSON.stringify(e, null, 2));
+        res.render('custom-query', {
+          schema: e,
+          nick: req.session.login
+        })
+      });
+  } else {
+    res.redirect('/login');
+  }
+});
+
+router.post('/custom_query', async function (req, res) {
+  if (req.session.login) {
+    console.log(req.body);
+     await controller.customQuery(req.body, req.session.type)
+       .then( e => {
+         res.json({result: e});
+       });
   } else {
     res.redirect('/login');
   }

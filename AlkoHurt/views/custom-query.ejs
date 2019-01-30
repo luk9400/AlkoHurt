@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script src="/javascripts/custom-query.js"></script>
     <script>
+        let schema = <%- JSON.stringify(schema)%>;
     </script>
 </head>
 <%include navbar.ejs%>
@@ -17,19 +18,38 @@
     <form>
         <fieldset>
             <div class="col-form-label">
-                <label for="typeSelect">Product</label>
-                <div id="selections" class="form-group product">
-                    <select class="form-control" required id="typeSelect" onchange="setSecondarySelect()">
-                        <option disabled selected>Product type</option>
-                        <option value="beers">Beers</option>
-                        <option value="wines">Wines</option>
-                        <option value="liquors">Liquors</option>
+                <label for="tableSelect">Table</label>
+                <div class="form-group product">
+                    <select class="form-control" required id="tableSelect" onchange="">
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="column0">Columns</label>
+                <div id="columnsDiv">
+                    <select class="form-control" id="column0">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Query result</div>
+                    <div class="card-body">
+                        <h2 id="query"></h2>
+                        <div id="tableDiv">
+
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="buttons">
                 <button onclick="location.href='/'" type="button" class="btn btn-primary btn-lg ">Back</button>
+                <button id="selectAll" type="button" class="btn btn-primary btn-lg">Select *</button>
+                <button id="addColumn" type="button" class="btn btn-primary btn-lg">Add column</button>
+                <button id="submit" type="button" class="btn btn-primary btn-lg">Submit</button>
             </div>
         </fieldset>
     </form>
