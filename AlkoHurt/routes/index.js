@@ -173,12 +173,17 @@ router.post('/plan_sale', async function (req, res) {
   if (req.session.login) {
     await controller.planSale(req.session.type, req.body)
       .then(() => {
-        console.log("Sale planned");
-        res.redirect('/');
+        res.json({
+          succeeded: 1,
+          message: 'Sale planned'
+        });
       })
       .catch(e => {
         console.log(e);
-        res.redirect('/');
+        res.json({
+          succeeded: 0,
+          message: e.message
+        });
       });
   } else {
     res.redirect('/login');
@@ -232,12 +237,17 @@ router.post('/plan_supply', async function (req, res) {
   if (req.session.login) {
     await controller.planSupply(req.session.type, req.body)
       .then(() => {
-        console.log("Supply planned");
-        res.redirect('/');
+        res.json({
+          succeeded: 1,
+          message: 'Supply planned'
+        });
       })
       .catch(e => {
         console.log(e);
-        res.redirect('/');
+        res.json({
+          succeeded: 0,
+          message: e.message
+        });
       });
   } else {
     res.redirect('/login');

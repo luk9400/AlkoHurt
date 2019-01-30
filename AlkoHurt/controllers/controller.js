@@ -172,6 +172,12 @@ async function planSale(type, saleData) {
   const date = saleData.date;
   const products = saleData.products;
 
+  if (new Date(date) < new Date()) {
+    throw new Error("You can't plan for the past!")
+  } else if (products === undefined || products.length === 0) {
+    throw new Error("You can't plan empty sale!")
+  }
+
   console.log(client_id, date, products);
 
   await conn.beginTransaction()
@@ -200,10 +206,17 @@ async function planSale(type, saleData) {
 }
 
 async function planSupply(type, supplyData) {
+
   const conn = await pool[type].getConnection();
   const supplier_id = supplyData.supplier;
   const date = supplyData.date;
   const products = supplyData.products;
+
+  if (new Date(date) < new Date()) {
+    throw new Error("You can't plan for the past!")
+  } else if (products === undefined || products.length === 0) {
+    throw new Error("You can't plan empty supply!")
+  }
 
   console.log(supplier_id, date, products);
 
