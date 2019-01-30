@@ -63,6 +63,7 @@ html {
 .navbar-custom {
   display: flex;
   justify-content: space-around;
+  background-color: #061d24 !important;
 }
 
 #nav-title {
@@ -74,14 +75,10 @@ html {
   bottom: 0;
   width: 100%;
   padding: 1rem;
-  background-color: #444444;
+  background-color: #061d24;
   display: flex;
   justify-content: center;
   margin-top: 30px;
-}
-
-#row {
-  width: 72%;
 }
 
 #col2 {
@@ -89,7 +86,15 @@ html {
 }
 
 .footer-container {
-  min-width: 72%;
+  min-width: 76%;
   display: flex;
   justify-content: space-between;
+}
+
+.footer-link {
+  color: #a88989;
+}
+
+.footer-link:hover {
+  color: #686969;
 }
