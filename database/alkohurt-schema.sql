@@ -11,7 +11,8 @@ CREATE TABLE products (
   capacity   int UNSIGNED,
   abv        float UNSIGNED,
   price      decimal(5, 2) UNSIGNED,
-  quantity   int UNSIGNED
+  quantity   int UNSIGNED,
+  CONSTRAINT abv_constr CHECK (avb <= 100)
 );
 
 CREATE TABLE liquors (
@@ -20,7 +21,8 @@ CREATE TABLE liquors (
   name       varchar(50),
   abv        float UNSIGNED,
   capacity   int UNSIGNED,
-  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
+  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE,
+  CONSTRAINT abv_constr CHECK (avb <= 100)
 );
 
 CREATE TABLE beers (
@@ -31,7 +33,8 @@ CREATE TABLE beers (
   abv            float UNSIGNED,
   capacity       int UNSIGNED,
   container_type ENUM ('bottle', 'can', 'returnable'),
-  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
+  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE,
+  CONSTRAINT abv_constr CHECK (avb <= 100)
 );
 
 CREATE TABLE wines (
@@ -42,7 +45,8 @@ CREATE TABLE wines (
   abv               float UNSIGNED,
   capacity          int UNSIGNED,
   country_of_origin varchar(30),
-  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
+  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE,
+  CONSTRAINT abv_constr CHECK (avb <= 100)
 );
 
 CREATE TABLE users (
