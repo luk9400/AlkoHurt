@@ -196,8 +196,6 @@ async function planSale(type, saleData) {
           console.log("Inserted");
         });
       conn.commit();
-    }).catch(e => {
-      console.log(e);
     });
 
   conn.end();

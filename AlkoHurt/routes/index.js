@@ -86,8 +86,21 @@ router.post('/add_wine', async function (req, res) {
   if (req.session.type === 'manager' || req.session.type === 'admin') {
     try {
       await controller.addWine(req.session.type, req.body.name, req.body.color, req.body.abv, req.body.type, req.body.capacity,
-        req.body.country_of_origin, req.body.price);
-      res.redirect('/')
+        req.body.country, req.body.price)
+        .then((e) => {
+          console.log(e);
+          res.json({
+            succeeded: 1,
+            message: 'Wine added'
+          });
+        })
+        .catch(e => {
+          console.log(e);
+          res.json({
+            succeeded: 0,
+            message: e.message
+          });
+        });
     } catch (e) {
       console.log(e);
     }
@@ -112,13 +125,21 @@ router.get('/add-beer', function (req, res) {
 
 router.post('/add_beer', async function (req, res) {
   if (req.session.type === 'manager' || req.session.type === 'admin') {
-    try {
-      await controller.addBeer(req.session.type, req.body.name, req.body.brew, req.body.abv, req.body.type, req.body.capacity,
-        req.body.container_type, req.body.price);
-      res.redirect('/')
-    } catch (e) {
-      console.log(e);
-    }
+    await controller.addBeer(req.session.type, req.body.name, req.body.brew, req.body.abv, req.body.type,
+      req.body.capacity, req.body.container_type, req.body.price)
+      .then(() => {
+        res.json({
+          succeeded: 1,
+          message: 'Beer added'
+        });
+      })
+      .catch(e => {
+        console.log(e);
+        res.json({
+          succeeded: 0,
+          message: e.message
+        });
+      });
   } else if (req.session.login) {
     res.redirect('/');
   } else {
@@ -141,8 +162,20 @@ router.get('/add-liquor', function (req, res) {
 router.post('/add_liquor', async function (req, res) {
   if (req.session.type === 'manager' || req.session.type === 'admin') {
     try {
-      await controller.addLiquor(req.session.type, req.body.name, req.body.type, req.body.abv, req.body.capacity, req.body.price);
-      res.redirect('/')
+      await controller.addLiquor(req.session.type, req.body.name, req.body.type, req.body.abv, req.body.capacity, req.body.price)
+        .then(() => {
+          res.json({
+            succeeded: 1,
+            message: 'Liquor added'
+          });
+        })
+        .catch(e => {
+          console.log(e);
+          res.json({
+            succeeded: 0,
+            message: e.message
+          });
+        });
     } catch (e) {
       console.log(e);
     }

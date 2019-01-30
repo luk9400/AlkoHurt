@@ -7,47 +7,49 @@
     <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
     <link rel="stylesheet" href="/stylesheets/style.css"/>
     <script src="/javascripts/setBodyPadding.js"></script>
-
+    <script src="/javascripts/add-beer.js"></script>
 </head>
 <body>
 <% include navbar %>
 <div class="container form">
     <h1>Add beer</h1>
-    <form action="/add_beer" method="post">
+    <div id="messageBox">
+    </div>
+    <form>
         <fieldset>
             <div class="form-group">
-                <label class="col-form-label" for="inputDefault">Name</label>
-                <input type="text" class="form-control" placeholder="Harnaś" id="inputDefault" required="required"
+                <label class="col-form-label" for="nameInput">Name</label>
+                <input type="text" class="form-control" placeholder="Harnaś" id="nameInput" required="required"
                        name="name">
             </div>
 
             <div class="form-group">
-                <label class="col-form-label" for="inputDefault">Brewery</label>
-                <input type="text" class="form-control" placeholder="Okocim" id="inputDefault" required="required"
+                <label class="col-form-label" for="brewInput">Brewery</label>
+                <input type="text" class="form-control" placeholder="Okocim" id="brewInput" required="required"
                        name="brew">
             </div>
 
             <div class="form-group">
-                <label class="col-form-label" for="inputDefault">Alcohol by volume (%)</label>
+                <label class="col-form-label" for="abvInput">Alcohol by volume (%)</label>
                 <input type="number" step="0.01" min="0" class="form-control" placeholder="11"
-                       id="inputDefault" required="required" name="abv">
+                       id="abvInput" required="required" name="abv">
             </div>
 
             <div class="form-group">
-                <label class="col-form-label" for="inputDefault">Type</label>
-                <input type="text" class="form-control" placeholder="Type" id="inputDefault" required="required"
+                <label class="col-form-label" for="typeInput">Type</label>
+                <input type="text" class="form-control" placeholder="Type" id="typeInput" required="required"
                        name="type">
             </div>
 
             <div class="form-group">
-                <label class="col-form-label" for="inputDefault">Capacity (ml)</label>
+                <label class="col-form-label" for="capacityInput">Capacity (ml)</label>
                 <input type="number" step="1" min="0" class="form-control" placeholder="500"
-                       id="inputDefault" required="required" name="capacity">
+                       id="capacityInput" required="required" name="capacity">
             </div>
 
             <div class="form-group">
-                <label for="exampleSelect1">Container type</label>
-                <select class="form-control" id="exampleSelect1" name="container_type">
+                <label for="containerSelect">Container type</label>
+                <select class="form-control" id="containerSelect" name="container_type">
                     <option>bottle</option>
                     <option>can</option>
                     <option>returnable</option>
@@ -55,13 +57,14 @@
             </div>
 
             <div class="form-group">
-                <label class="col-form-label" for="inputDefault">Price</label>
-                <input type="number" step="0.01" min="0" class="form-control" placeholder="2.99" id="inputDefault"
+                <label class="col-form-label" for="priceInput">Price</label>
+                <input type="number" step="0.01" min="0" class="form-control" placeholder="2.99" id="priceInput"
                        required="required" name="price">
             </div>
+
             <div class="buttons">
                 <button onclick="location.href='/'" type="button" class="btn btn-primary btn-lg ">Back</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button id="submit" type="button" class="btn btn-primary">Submit</button>
             </div>
         </fieldset>
     </form>
