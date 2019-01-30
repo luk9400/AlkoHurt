@@ -4,14 +4,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf8">
     <title>Plan sale</title>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
     <script src="/javascripts/plan-sale.js"></script>
     <script>
-      let data = <%- JSON.stringify(data)%>;
+      let data = <%- JSON.stringify(data) %>;
     </script>
 </head>
-<%include navbar%>
+<% include navbar %>
 <body>
 <div class="container form">
     <h1>Plan sale</h1>
@@ -19,14 +19,16 @@
         <fieldset>
             <div class="form-group">
                 <label class="col-form-label" for="clientSelect">Client</label>
-                <select onchange="updateClientAndDate()" class="form-control" id="clientSelect" required name="supplier">
+                <select onchange="updateClientAndDate()" class="form-control" id="clientSelect" required
+                        name="supplier">
 
                 </select>
             </div>
 
             <div class="form-group">
                 <label class="col-form-label" for="dateInput">Date</label>
-                <input onchange="updateClientAndDate()" type="date" class="form-control" id="dateInput" required name="date">
+                <input onchange="updateClientAndDate()" type="date" class="form-control" id="dateInput" required
+                       name="date">
             </div>
 
             <div id="selections" class="col-form-label">
@@ -40,8 +42,6 @@
         </fieldset>
     </form>
 </div>
-<footer>
-    <%include footer.ejs%>
-</footer>
+<% include footer.ejs %>
 </body>
 </html>

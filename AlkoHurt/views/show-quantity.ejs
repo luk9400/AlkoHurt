@@ -4,16 +4,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf8">
     <title>Show quantity</title>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
     <script src="/javascripts/show-quantity.js"></script>
     <script>
-      let data = <%- JSON.stringify(data)%>;
+      let data = <%- JSON.stringify(data) %>;
     </script>
 </head>
-<%include navbar.ejs%>
+<% include navbar.ejs %>
 <body>
-<div class="container form" >
+<div class="container form">
     <h1>Show quantity</h1>
     <form>
         <fieldset>
@@ -50,8 +50,6 @@
         </fieldset>
     </form>
 </div>
-<footer>
-    <%include footer.ejs%>
-</footer>
+<% include footer.ejs %>
 </body>
 </html>

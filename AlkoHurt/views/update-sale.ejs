@@ -4,16 +4,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf8">
     <title>Update sale</title>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
     <script src="/javascripts/update-sale.js"></script>
     <script>
-      let data = <%- JSON.stringify(data)%>;
+      let data = <%- JSON.stringify(data) %>;
     </script>
 </head>
-<%include navbar%>
+<% include navbar %>
 <body>
-<div class="container form" >
+<div class="container form">
     <h1>Update sale</h1>
     <form action="/update_sale" method="post">
         <fieldset>
@@ -37,8 +37,6 @@
         </fieldset>
     </form>
 </div>
-<footer>
-    <%include footer.ejs%>
-</footer>
+<% include footer.ejs %>
 </body>
 </html>

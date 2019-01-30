@@ -1,5 +1,5 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px "Lucida Grande", "Comic Sans MS", Helvetica, Arial, sans-serif;
   background-image: url('../images/wheat.png');
 }
 
@@ -15,14 +15,12 @@ body {
   height: 100%;
   width: 100%;
   padding: 0;
-}
-
-#mainh1 {
-  max-width: 400px !important;
+  margin-top: 30px;
 }
 
 .form {
   max-width: 800px !important;
+  margin-top: 30px;
 }
 
 .main {
@@ -53,45 +51,37 @@ body {
   color: green;
 }
 
-#navbar {
-  margin-bottom: 20px;
+#quantity {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+}
+
+.navbar-custom {
+  /*margin-bottom: 20px;*/
+  display: flex;
+  justify-content: space-around;
 }
 
 #nav-title {
   margin: 0;
 }
 
-#navbar-container {
-  display: flex;
-  justify-content: space-between;
-  width: 800px;
-  max-width: 800px;
-  padding: 0 15px;
-}
-
-#quantity {
-  display: flex;
-  justify-content: center;
-}
-
-.footer {
-  position: relative;
+.footer-custom {
+  position: absolute;
   bottom: 0;
-  margin-top: 30px;
-  margin-bottom: 20px;
+  width: 100%;
+  padding: 1rem;
+  background-color: #444444;
   display: flex;
   justify-content: center;
 }
 
-.footer-container {
-  width: 800px;
-  max-width: 800px;
-  padding: 0 15px;
+#row {
+  width: 72%;
 }
 
-#footer-line {
-  display: flex;
-  justify-content: space-between;
+#col2 {
+  text-align: right;
 }
+
+

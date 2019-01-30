@@ -3,23 +3,25 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add supplier</title>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
 </head>
 <body>
-<%include navbar%>
-<div class="container form" >
+<% include navbar %>
+<div class="container form">
     <h1>Add supplier</h1>
     <form action="/add_supplier" method="post">
         <fieldset>
             <div class="form-group">
                 <label class="col-form-label" for="inputDefault">Name</label>
-                <input type="text" class="form-control" placeholder="Name" id="inputDefault" required="required" name="name">
+                <input type="text" class="form-control" placeholder="Name" id="inputDefault" required="required"
+                       name="name">
             </div>
 
             <div class="form-group">
                 <label class="col-form-label" for="inputDefault">NIP</label>
-                <input type="number" pattern="[0-9]{10}" title="10 digits required" class="form-control" placeholder="XXXXXXXXXX" id="inputDefault" required name="nip">
+                <input type="number" pattern="[0-9]{10}" title="10 digits required" class="form-control"
+                       placeholder="XXXXXXXXXX" id="inputDefault" required name="nip">
             </div>
 
             <div class="form-group">
@@ -39,12 +41,14 @@
 
             <div class="form-group">
                 <label class="col-form-label" for="inputDefault">Phone number</label>
-                <input type="number" class="form-control" placeholder="48 666 666 666" id="inputDefault" required name="phone">
+                <input type="number" class="form-control" placeholder="48 666 666 666" id="inputDefault" required
+                       name="phone">
             </div>
 
             <div class="form-group">
                 <label class="col-form-label" for="inputDefault">Email address</label>
-                <input type="email" class="form-control" placeholder="email@example.com" id="inputDefault" required="required" name="email">
+                <input type="email" class="form-control" placeholder="email@example.com" id="inputDefault"
+                       required="required" name="email">
             </div>
             <div class="buttons">
                 <button onclick="location.href='/'" type="button" class="btn btn-primary btn-lg ">Back</button>
@@ -53,8 +57,6 @@
         </fieldset>
     </form>
 </div>
-<footer>
-    <%include footer%>
-</footer>
+<%include footer%>
 </body>
 </html>
