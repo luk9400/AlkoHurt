@@ -34,10 +34,11 @@ GRANT INSERT ON alkohurt.sales_info TO worker;
 GRANT EXECUTE ON FUNCTION alkohurt.quantity_on_date TO worker;
 GRANT EXECUTE ON PROCEDURE alkohurt.update_sale TO worker;
 GRANT EXECUTE ON PROCEDURE alkohurt.update_supply TO worker;
-
+REVOKE EXECUTE ON PROCEDURE alkohurt.update_sale FROM worker;
 GRANT EXECUTE ON PROCEDURE alkohurt.add_beer TO manager;
 GRANT EXECUTE ON PROCEDURE alkohurt.add_liquor TO manager;
 GRANT EXECUTE ON PROCEDURE alkohurt.add_wine TO manager;
+GRANT INSERT ON alkohurt.suppliers TO manager;
 
 GRANT INSERT ON alkohurt.users TO admin;
 GRANT DELETE ON alkohurt.users TO admin;

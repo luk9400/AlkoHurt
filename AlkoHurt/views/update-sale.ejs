@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css"/>
     <script src="/javascripts/setBodyPadding.js"></script>
     <script src="/javascripts/update-sale.js"></script>
+    <script src="/javascripts/tableify.js"></script>
     <script>
       let data = <%- JSON.stringify(data) %>;
     </script>
@@ -16,7 +17,9 @@
 <body>
 <div class="container form">
     <h1>Update sale</h1>
-    <form action="/update_sale" method="post">
+    <div id="messageBox">
+    </div>
+    <form>
         <fieldset>
             <div class="form-group">
                 <label class="col-form-label" for="saleSelect">Sale</label>
@@ -33,7 +36,7 @@
             </div>
             <div class="buttons">
                 <button onclick="location.href='/'" type="button" class="btn btn-primary btn-lg ">Back</button>
-                <button type="submit" class="btn btn-primary btn-lg ">Submit</button>
+                <button id="submit" type="button" class="btn btn-primary btn-lg ">Submit</button>
             </div>
         </fieldset>
     </form>

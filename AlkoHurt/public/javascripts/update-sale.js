@@ -2,22 +2,22 @@ window.addEventListener('load', () => {
   console.log(data);
   fillSaleSelect();
   fillSaleTable();
+  document.getElementById('submit').addEventListener('click', sendRequest);
 });
 
-const fillSaleSelect = () => {
+function fillSaleSelect() {
   let select = document.getElementById('saleSelect');
   select.addEventListener('change', fillSaleTable);
   for (let sale of data) {
     console.log(sale);
     let option = document.createElement('option');
     option.value = sale.sale_id;
-    option.appendChild(document.createTextNode(sale.sale_id + ' '
-      + sale.client + ' ' + sale.date));
+    option.appendChild(document.createTextNode(sale.client + ' ' + sale.date));
     select.appendChild(option)
   }
-};
+}
 
-const fillSaleTable = () => {
+function fillSaleTable() {
   const saleInfoDiv = document.getElementById('saleInfo');
   const saleSelect = document.getElementById('saleSelect');
 
@@ -32,35 +32,54 @@ const fillSaleTable = () => {
       break;
     }
   }
-};
+}
 
-// We assume that every object has the same keys
-function objArrayToTable(objArray) {
-  let table = document.createElement('table');
-  table.className = 'table table-secondary';
-  table.style.marginBottom = '0px';
-  let thead = document.createElement('thead');
-  let headersRow = document.createElement('tr');
-
-  for (let key of Object.keys(objArray[0])) {
-    let header = document.createElement('th');
-    let headerText = key.toString();
-    header.appendChild(document.createTextNode(headerText));
-    headersRow.appendChild(header);
-  }
-  thead.appendChild(headersRow);
-  table.appendChild(thead);
-
-  for (let obj of objArray) {
-    let row = document.createElement('tr');
-    for (let key of Object.keys(obj)) {
-      let data = document.createElement('td');
-      let dataText = obj[key];
-      data.appendChild(document.createTextNode(dataText));
-      row.appendChild(data);
+function sendRequest() {
+  let xhr = new XMLHttpRequest();
+  let saleSelect = document.getElementById('saleSelect');
+  xhr.open('POST', '/update_sale', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    let response = JSON.parse(xhr.responseText);
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      showMessage(response);
     }
-    table.appendChild(row);
+  };
+  xhr.send(JSON.stringify({
+    sale_id: saleSelect.value
+  }));
+}
+
+function showMessage(response) {
+  let messageBox = document.getElementById('messageBox');
+  let messageHead = document.createElement('strong');
+
+  if (response.succeeded) {
+    clearSaleSelect();
+    messageHead.appendChild(document.createTextNode('Success!'));
+    messageBox.className = 'alert alert-dismissible alert-success';
+  } else {
+    messageHead.appendChild(document.createTextNode('Oh snap!'));
+    messageBox.className = 'alert alert-dismissible alert-danger';
   }
 
-  return table;
+  messageBox.appendChild(messageHead);
+  messageBox.appendChild(document.createTextNode(' ' + response.message));
+  setTimeout(() => {
+    while (messageBox.lastChild) {
+      messageBox.removeChild(messageBox.lastChild);
+    }
+    messageBox.classList = null;
+  }, 2000);
+}
+
+function clearSaleSelect() {
+  let saleSelect = document.getElementById('saleSelect') ;
+
+  for (let option of saleSelect) {
+    if (option.value === saleSelect.value) {
+      saleSelect.removeChild(option);
+      break;
+    }
+  }
 }

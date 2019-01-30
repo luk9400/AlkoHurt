@@ -173,12 +173,17 @@ router.post('/plan_sale', async function (req, res) {
   if (req.session.login) {
     await controller.planSale(req.session.type, req.body)
       .then(() => {
-        console.log("Sale planned");
-        res.redirect('/');
+        res.json({
+          succeeded: 1,
+          message: 'Sale planned'
+        });
       })
       .catch(e => {
         console.log(e);
-        res.redirect('/');
+        res.json({
+          succeeded: 0,
+          message: e.message
+        });
       });
   } else {
     res.redirect('/login');
@@ -202,9 +207,19 @@ router.get('/update-sale', async function (req, res) {
 
 router.post('/update_sale', async function (req, res) {
   if (req.session.login) {
-    controller.updateSale(req.session.type, req.body.saleSelect).then(() => {
-      res.redirect('/');
-    });
+    controller.updateSale(req.session.type, req.body.sale_id)
+      .then(() => {
+        res.json({
+          succeeded: 1,
+          message: 'Sale updated'
+        });
+      })
+      .catch(e => {
+        res.json({
+          succeeded: 0,
+          message: e.message
+        });
+      });
   } else {
     res.redirect('/login');
   }
@@ -232,12 +247,17 @@ router.post('/plan_supply', async function (req, res) {
   if (req.session.login) {
     await controller.planSupply(req.session.type, req.body)
       .then(() => {
-        console.log("Supply planned");
-        res.redirect('/');
+        res.json({
+          succeeded: 1,
+          message: 'Supply planned'
+        });
       })
       .catch(e => {
         console.log(e);
-        res.redirect('/');
+        res.json({
+          succeeded: 0,
+          message: e.message
+        });
       });
   } else {
     res.redirect('/login');
@@ -261,9 +281,19 @@ router.get('/update-supply', async function (req, res) {
 
 router.post('/update_supply', async function (req, res) {
   if (req.session.login) {
-    controller.updateSupply(req.session.type, req.body.supplySelect).then(() => {
-      res.redirect('/');
-    });
+    controller.updateSupply(req.session.type, req.body.supply_id)
+      .then(() => {
+        res.json({
+          succeeded: 1,
+          message: 'Supply updated'
+        });
+      })
+      .catch(e => {
+        res.json({
+          succeeded: 0,
+          message: e.message
+        });
+      });
   } else {
     res.redirect('/login');
   }

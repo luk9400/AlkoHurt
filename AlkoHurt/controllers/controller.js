@@ -167,13 +167,17 @@ async function getPlanSaleData(type) {
 }
 
 async function planSale(type, saleData) {
-  const conn = await pool[type].getConnection();
   const client_id = saleData.client;
   const date = saleData.date;
   const products = saleData.products;
 
-  console.log(client_id, date, products);
+  if (new Date(date) < new Date()) {
+    throw new Error("You can't plan for the past!")
+  } else if (products === undefined || products.length === 0) {
+    throw new Error("You can't plan empty sale!")
+  }
 
+  const conn = await pool[type].getConnection();
   await conn.beginTransaction()
     .then(async () => {
       const newSale =
@@ -200,13 +204,17 @@ async function planSale(type, saleData) {
 }
 
 async function planSupply(type, supplyData) {
-  const conn = await pool[type].getConnection();
   const supplier_id = supplyData.supplier;
   const date = supplyData.date;
   const products = supplyData.products;
 
-  console.log(supplier_id, date, products);
+  if (new Date(date) < new Date()) {
+    throw new Error("You can't plan for the past!")
+  } else if (products === undefined || products.length === 0) {
+    throw new Error("You can't plan empty supply!")
+  }
 
+  const conn = await pool[type].getConnection();
   await conn.beginTransaction()
     .then(async () => {
       const newSupply =
@@ -291,14 +299,14 @@ async function getSupplies(type) {
 
 async function updateSupply(type, supply_id) {
   const conn = await pool[type].getConnection();
-
-  await conn.query('CALL update_supply(?)', [supply_id])
-    .then(e => {
-      console.log(e);
-      console.log('Supply made done :)')
-    });
-
-  conn.end();
+  try {
+    await conn.query('CALL update_supply(?)', [supply_id]);
+    conn.end();
+  } catch (e) {
+    console.log(e);
+    conn.end();
+    throw new Error(e.message);
+  }
 }
 
 async function getSales(type) {
@@ -336,13 +344,14 @@ async function getSales(type) {
 async function updateSale(type, sale_id) {
   const conn = await pool[type].getConnection();
 
-  await conn.query('CALL update_sale(?)', [sale_id])
-    .then(e => {
-      console.log(e);
-      console.log('Sale made done :)')
-    });
-
-  conn.end();
+  try {
+    await conn.query('CALL update_sale(?)', [sale_id]);
+    conn.end();
+  } catch (e) {
+    console.log(e);
+    conn.end();
+    throw new Error(e.message);
+  }
 }
 
 async function getProducts(type) {

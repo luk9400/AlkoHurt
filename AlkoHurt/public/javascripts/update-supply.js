@@ -1,24 +1,22 @@
 window.addEventListener('load', () => {
   console.log(data);
   fillSupplySelect();
-  // fillSupplyInfo();
   fillSupplyTable();
+  document.getElementById('submit').addEventListener('click', sendRequest);
 });
 
-const fillSupplySelect = () => {
+function fillSupplySelect() {
   let select = document.getElementById('supplySelect');
-  // select.addEventListener('change', fillSupplyInfo);
   select.addEventListener('change', fillSupplyTable);
   for (let supply of data) {
     let option = document.createElement('option');
     option.value = supply.supply_id;
-    option.appendChild(document.createTextNode(supply.supply_id + ' '
-      + supply.supplier + ' ' + supply.date));
+    option.appendChild(document.createTextNode(supply.supplier + ' ' + supply.date));
     select.appendChild(option)
   }
-};
+}
 
-const fillSupplyTable = () => {
+function fillSupplyTable() {
   const supplyInfoDiv = document.getElementById('supplyInfo');
   const supplySelect = document.getElementById('supplySelect');
 
@@ -33,35 +31,54 @@ const fillSupplyTable = () => {
       break;
     }
   }
-};
+}
 
-// We assume that every object has the same keys
-function objArrayToTable(objArray) {
-  let table = document.createElement('table');
-  table.className = 'table table-active';
-  table.style.marginBottom = '0px';
-  let thead = document.createElement('thead');
-  let headersRow = document.createElement('tr');
-
-  for (let key of Object.keys(objArray[0])) {
-    let header = document.createElement('th');
-    let headerText = key.toString();
-    header.appendChild(document.createTextNode(headerText));
-    headersRow.appendChild(header);
-  }
-  thead.appendChild(headersRow);
-  table.appendChild(thead);
-
-  for (let obj of objArray) {
-    let row = document.createElement('tr');
-    for (let key of Object.keys(obj)) {
-      let data = document.createElement('td');
-      let dataText = obj[key];
-      data.appendChild(document.createTextNode(dataText));
-      row.appendChild(data);
+function sendRequest() {
+  let xhr = new XMLHttpRequest();
+  let supplySelect = document.getElementById('supplySelect');
+  xhr.open('POST', '/update_supply', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    let response = JSON.parse(xhr.responseText);
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      showMessage(response);
     }
-    table.appendChild(row);
+  };
+  xhr.send(JSON.stringify({
+    supply_id: supplySelect.value
+  }));
+}
+
+function showMessage(response) {
+  let messageBox = document.getElementById('messageBox');
+  let messageHead = document.createElement('strong');
+
+  if (response.succeeded) {
+    clearSupplySelect();
+    messageHead.appendChild(document.createTextNode('Success!'));
+    messageBox.className = 'alert alert-dismissible alert-success';
+  } else {
+    messageHead.appendChild(document.createTextNode('Oh snap!'));
+    messageBox.className = 'alert alert-dismissible alert-danger';
   }
 
-  return table;
+  messageBox.appendChild(messageHead);
+  messageBox.appendChild(document.createTextNode(' ' + response.message));
+  setTimeout(() => {
+    while (messageBox.lastChild) {
+      messageBox.removeChild(messageBox.lastChild);
+    }
+    messageBox.classList = null;
+  }, 2000);
+}
+
+function clearSupplySelect() {
+  let supplySelect = document.getElementById('supplySelect') ;
+
+  for (let option of supplySelect) {
+    if (option.value === supplySelect.value) {
+      supplySelect.removeChild(option);
+      break;
+    }
+  }
 }

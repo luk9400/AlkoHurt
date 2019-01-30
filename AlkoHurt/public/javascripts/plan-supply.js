@@ -1,6 +1,13 @@
 window.addEventListener('load', () => {
   console.log(data);
   fillSuppliersSelect();
+  document.getElementById('addProduct').addEventListener('click', addNewProductField);
+  document.getElementById('submit').addEventListener('click', sendRequest);
+});
+
+window.addEventListener('change', () => {
+  updateSupplierAndDate();
+  console.log('xd');
 });
 
 let product_index = 0;
@@ -10,7 +17,7 @@ let supplyData = {
   products: []
 };
 
-const addNewProductField = () => {
+function addNewProductField() {
   let selections = document.getElementById('selections');
   let labeledContainer = document.createElement('div');
   let container = document.createElement('div');
@@ -23,7 +30,6 @@ const addNewProductField = () => {
   label.for = 'div';
   label.appendChild(document.createTextNode('Product ' + (product_index + 1).toString()));
   labeledContainer.appendChild(label);
-  // select.placeholder = 'Product type'
   labeledContainer.className = 'form-group';
   defaultOption.disabled = true;
   defaultOption.selected = true;
@@ -54,9 +60,9 @@ const addNewProductField = () => {
   selections.appendChild(labeledContainer);
 
   product_index++;
-};
+}
 
-const setSecondarySelect = (container) => {
+function setSecondarySelect(container) {
   let nameSelect = document.createElement('select');
   let quantityInput = document.createElement('input');
 
@@ -95,7 +101,7 @@ const setSecondarySelect = (container) => {
 
   container.appendChild(nameSelect);
   container.appendChild(quantityInput);
-};
+}
 
 function updateSupplierAndDate() {
   supplyData.supplier = document.getElementById('supplierSelect').value;
@@ -118,7 +124,7 @@ function updateProductsData(container) {
   }
 }
 
-const fillSuppliersSelect = () => {
+function fillSuppliersSelect() {
   let supplierSelect = document.getElementById('supplierSelect');
 
   for (let supplier of data.suppliers) {
@@ -127,14 +133,20 @@ const fillSuppliersSelect = () => {
     option.appendChild(document.createTextNode(supplier.name));
     supplierSelect.appendChild(option);
   }
-};
+}
 
-const sendRequest = () => {
+function sendRequest() {
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/plan_supply', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
   console.log(JSON.stringify(supplyData));
+  xhr.onload = function() {
+    let response = JSON.parse(xhr.responseText);
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      showMessage(response);
+    }
+  };
   xhr.send(JSON.stringify(supplyData));
-};
+}
 
 

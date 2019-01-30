@@ -1,11 +1,11 @@
 window.addEventListener('load', () => {
   console.log(data);
+  document.getElementById('typeSelect').addEventListener('change', setSecondarySelect);
 });
 
 window.addEventListener('change', () => {
   updateInfo();
   senRequest();
-  console.log('xd');
 });
 
 let quantityData = {
@@ -13,7 +13,7 @@ let quantityData = {
   date: null
 };
 
-const setSecondarySelect = () => {
+function setSecondarySelect() {
   let selections = document.getElementById('selections');
   let typeSelect = document.getElementById('typeSelect');
   let nameSelect = document.createElement('select');
@@ -41,18 +41,18 @@ const setSecondarySelect = () => {
   }
 
   selections.appendChild(nameSelect);
-};
+}
 
-const updateInfo = () =>  {
+function updateInfo() {
   try {
     quantityData.product_id = document.getElementById('nameSelect').value;
     quantityData.date = document.getElementById('dateInput').value;
   } catch (e) {
     console.log(e);
   }
-};
+}
 
-const senRequest = () => {
+function senRequest() {
   if (quantityData.date !== "" && quantityData.product_id != null) {
     let quantity = document.getElementById('quantity');
     let xhr = new XMLHttpRequest();
@@ -67,4 +67,4 @@ const senRequest = () => {
     };
     xhr.send(JSON.stringify(quantityData));
   }
-};
+}

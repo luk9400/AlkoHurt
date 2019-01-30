@@ -1,6 +1,13 @@
 window.addEventListener('load', () => {
   console.log(data);
   fillClientsSelect();
+  document.getElementById('addProduct').addEventListener('click', addNewProductField);
+  document.getElementById('submit').addEventListener('click', sendRequest);
+});
+
+window.addEventListener('change', () => {
+  updateClientAndDate();
+  console.log('xd');
 });
 
 let product_index = 0;
@@ -10,7 +17,7 @@ let saleData = {
   products: []
 };
 
-const fillClientsSelect = () => {
+function fillClientsSelect() {
   let clientSelect = document.getElementById('clientSelect');
 
   for (let client of data.clients) {
@@ -19,9 +26,9 @@ const fillClientsSelect = () => {
     option.appendChild(document.createTextNode(client.name));
     clientSelect.appendChild(option);
   }
-};
+}
 
-const addNewProductField = () => {
+function addNewProductField () {
   let selections = document.getElementById('selections');
   let labeledContainer = document.createElement('div');
   let container = document.createElement('div');
@@ -64,9 +71,9 @@ const addNewProductField = () => {
   selections.appendChild(labeledContainer);
 
   product_index++;
-};
+}
 
-const setSecondarySelect = (container) => {
+function setSecondarySelect(container) {
   let nameSelect = document.createElement('select');
   let quantitySelect = document.createElement('select');
 
@@ -133,7 +140,7 @@ const setSecondarySelect = (container) => {
   updateQuantitySelect();
   container.appendChild(nameSelect);
   container.appendChild(quantitySelect);
-};
+}
 
 function updateProductsData(container) {
   try {
@@ -158,10 +165,15 @@ function updateClientAndDate() {
   console.log('Client and date updated');
 }
 
-const sendRequest = () => {
+function sendRequest() {
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/plan_sale', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    let response = JSON.parse(xhr.responseText);
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      showMessage(response);
+    }
+  };
   xhr.send(JSON.stringify(saleData));
-  console.log('XMLHttpRequest has been send');
-};
+}
