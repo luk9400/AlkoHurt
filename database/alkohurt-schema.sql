@@ -10,7 +10,7 @@ CREATE TABLE products (
   type       enum ('beer', 'liquor', 'wine'),
   capacity   int UNSIGNED,
   abv        float UNSIGNED,
-  price      decimal(4, 2) UNSIGNED,
+  price      decimal(5, 2) UNSIGNED,
   quantity   int UNSIGNED
 );
 
@@ -86,7 +86,7 @@ CREATE TABLE clients (
   street_and_number varchar(50),
   postal_code       varchar(8), # 8 for international postal codes (for example PL-00001),
   city              varchar(30),
-  phone_number      varchar(12),
+  phone_number      varchar(15),
   email             varchar(50)
 );
 
@@ -109,7 +109,7 @@ CREATE TABLE sales_info (
 
 DELIMITER //
 CREATE PROCEDURE add_product(IN name_in VARCHAR(50), IN type_in ENUM('beer', 'liquor', 'wine'), IN capacity_in INT UNSIGNED,
-  IN abv_in FLOAT UNSIGNED, IN price_in DECIMAL(4, 2) UNSIGNED, IN quantity_in INT UNSIGNED, OUT id INT)
+  IN abv_in FLOAT UNSIGNED, IN price_in DECIMAL(5, 2) UNSIGNED, IN quantity_in INT UNSIGNED, OUT id INT)
   BEGIN
     INSERT INTO products(name, type, capacity, abv, price, quantity)
     VALUES (
@@ -161,7 +161,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE add_beer(IN name VARCHAR(50), IN brewery VARCHAR(50), IN abv FLOAT UNSIGNED, IN type VARCHAR(50),
-  IN capacity INT UNSIGNED, IN container_type ENUM('bottle', 'can', 'returnable'), IN price DECIMAL(4, 2) UNSIGNED)
+  IN capacity INT UNSIGNED, IN container_type ENUM('bottle', 'can', 'returnable'), IN price DECIMAL(5, 2) UNSIGNED)
   BEGIN
     IF beer_already_exists(name, brewery, abv, type, capacity, container_type) THEN
       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Beer already exists';
@@ -212,7 +212,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE add_wine(IN name VARCHAR(50), IN color ENUM('white', 'red', 'rose'), IN abv FLOAT UNSIGNED,
   IN type ENUM('brut nature', 'extra brut', 'brut', 'extra dry', 'dry', 'medium dry', 'medium sweet', 'sweet'),
-  IN capacity INT UNSIGNED, IN country_of_origin VARCHAR(30), IN price DECIMAL(4, 2) UNSIGNED)
+  IN capacity INT UNSIGNED, IN country_of_origin VARCHAR(30), IN price DECIMAL(5, 2) UNSIGNED)
   BEGIN
     IF wine_already_exists(name, color, abv, type, capacity, country_of_origin) THEN
       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Wine already exists';
@@ -256,7 +256,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE add_liquor(IN name VARCHAR(50), IN type ENUM('vodka', 'whiskey', 'gin'), IN abv FLOAT UNSIGNED,
-  IN capacity INT UNSIGNED, IN price DECIMAL(4, 2) UNSIGNED)
+  IN capacity INT UNSIGNED, IN price DECIMAL(5, 2) UNSIGNED)
   BEGIN
     IF liquor_already_exists(name, type, abv, capacity) THEN
       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Liquor already exists';
@@ -268,7 +268,7 @@ CREATE PROCEDURE add_liquor(IN name VARCHAR(50), IN type ENUM('vodka', 'whiskey'
 DELIMITER ;
 
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS update_quantity_supplies AFTER UPDATE ON supplies FOR EACH ROW
+CREATE TRIGGER update_quantity_supplies AFTER UPDATE ON supplies FOR EACH ROW
   BEGIN
     IF NEW.done AND NOT OLD.done THEN
       CREATE TEMPORARY TABLE prods AS (
@@ -282,7 +282,7 @@ CREATE TRIGGER IF NOT EXISTS update_quantity_supplies AFTER UPDATE ON supplies F
 DELIMITER ;
 
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS delete_products AFTER DELETE ON products FOR EACH ROW
+CREATE TRIGGER delete_products AFTER DELETE ON products FOR EACH ROW
   BEGIN
     DELETE FROM beers WHERE beers.product_id = OLD.product_id;
     DELETE FROM liquors WHERE liquors.product_id = OLD.product_id;
@@ -291,7 +291,7 @@ CREATE TRIGGER IF NOT EXISTS delete_products AFTER DELETE ON products FOR EACH R
 DELIMITER ;
 
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS update_quantity_sales AFTER UPDATE ON sales FOR EACH ROW
+CREATE TRIGGER update_quantity_sales AFTER UPDATE ON sales FOR EACH ROW
   BEGIN
     IF NEW.done AND NOT OLD.done THEN
       CREATE TEMPORARY TABLE prods AS (
@@ -305,7 +305,7 @@ CREATE TRIGGER IF NOT EXISTS update_quantity_sales AFTER UPDATE ON sales FOR EAC
 DELIMITER ;
 
 DELIMITER //
-CREATE FUNCTION IF NOT EXISTS quantity_on_date(in_product_id INT, in_date DATE) RETURNS INT
+CREATE FUNCTION quantity_on_date(in_product_id INT, in_date DATE) RETURNS INT
 BEGIN
   DECLARE supplied INT;
   DECLARE sold INT;
@@ -317,8 +317,8 @@ BEGIN
   SELECT SUM(quantity)
   FROM supplies_info si JOIN supplies s ON si.supply_id = s.supply_id
   WHERE si.product_id = in_product_id AND
-        supply_date BETWEEN NOW() AND in_date AND
-        NOT done
+        (supply_date BETWEEN NOW() AND in_date AND
+        NOT done) OR NOT done
   INTO supplied;
 
   SELECT SUM(quantity)
@@ -354,4 +354,44 @@ CREATE PROCEDURE update_sale(IN in_sale_id INT)
 BEGIN
   UPDATE sales SET done = 1 WHERE sale_id = in_sale_id;
 END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE FUNCTION nip_is_valid(nip CHAR(10)) RETURNS BOOLEAN
+BEGIN
+  IF MOD(
+    6*CAST(SUBSTR(nip, 1, 1) AS UNSIGNED) +
+    5*CAST(SUBSTR(nip, 2, 1) AS UNSIGNED) +
+    7*CAST(SUBSTR(nip, 3, 1) AS UNSIGNED) +
+    2*CAST(SUBSTR(nip, 4, 1) AS UNSIGNED) +
+    3*CAST(SUBSTR(nip, 5, 1) AS UNSIGNED) +
+    4*CAST(SUBSTR(nip, 6, 1) AS UNSIGNED) +
+    5*CAST(SUBSTR(nip, 7, 1) AS UNSIGNED) +
+    6*CAST(SUBSTR(nip, 8, 1) AS UNSIGNED) +
+    7*CAST(SUBSTR(nip, 9, 1) AS UNSIGNED),
+    11) <> SUBSTR(nip, 10, 1)
+  THEN
+    RETURN FALSE;
+  ELSE
+    RETURN TRUE;
+  END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE TRIGGER clients_insert BEFORE INSERT ON clients FOR EACH ROW
+  BEGIN
+    IF NOT nip_is_valid(new.nip) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NIP control sum error';
+    END IF;
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE TRIGGER suppliers_insert BEFORE INSERT ON suppliers FOR EACH ROW
+  BEGIN
+    IF NOT nip_is_valid(new.nip) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NIP control sum error';
+    END IF;
+  END //
 DELIMITER ;
