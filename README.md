@@ -1,5 +1,5 @@
 # AlkoHurt
-Aplikacja webowa do zarządzania hurtownią alkoholii.
+Aplikacja webowa do zarządzania hurtownią alkoholi.
 
 ### Wykorzystane technologie
 <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="drawing" height=50px/><img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" alt="drawing" height=50px/><img 
